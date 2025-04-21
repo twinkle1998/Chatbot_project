@@ -1,15 +1,27 @@
 import os
 import json
 from crewai import LLM
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 # Load environment variables from .env file
+dotenv_path = find_dotenv()
 load_dotenv()
 
-# Load credentials from environment variable
-vertex_credentials_json = os.getenv("VERTEX_CREDENTIALS")
-if not vertex_credentials_json:
-    raise ValueError("VERTEX_CREDENTIALS environment variable not set")
+# Load Google service account credentials
+file_path = 'gen-lang-client-0184211067-8d635d347db2.json'
+if os.path.exists(file_path):
+    with open(file_path, 'r') as file:
+        vertex_credentials = json.load(file)
+else:
+    # Fallback for Render secret file
+    vertex_credentials_json = os.getenv('VERTEX_CREDENTIALS')
+    if vertex_credentials_json:
+        vertex_credentials = json.loads(vertex_credentials_json)
+    else:
+        raise FileNotFoundError("Vertex AI credentials not found in file or environment variable.")
+
+# Convert credentials to JSON string
+vertex_credentials_json = json.dumps(vertex_credentials)
 
 # Define class for LLM
 class google_model:
