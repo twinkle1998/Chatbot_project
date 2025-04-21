@@ -127,6 +127,13 @@
     .home-detail-content p:last-child {
       margin-bottom: 0;
     }
+    .home-detail-content iframe {
+      width: 100%;
+      height: 200px;
+      border: 0;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
     .search-result {
       display: none;
       background-color: #FFFFFF;
@@ -662,6 +669,9 @@
         font-size: 16px;
         line-height: 1.4;
       }
+      .home-detail-content iframe {
+        height: 150px;
+      }
       .search-bar {
         font-size: 16px;
         padding: 8px 12px;
@@ -808,6 +818,7 @@
             <p>From the "Home" tab, select "Share Your Feedback or Report an Issue" to begin a new conversation, or explore helpful articles by clicking on options like "What is This Chatbot For?" or "Getting Started with Amazon Chatbot."</p>
             <p>In the "Messages" tab, the chatbot will guide you step-by-step—first asking for your name, then the purchase date, the product, and finally your feedback or issue.</p>
             <p>You can also use the search bar on the "Home" tab to quickly find help on specific topics, or use the microphone button to send voice messages for a hands-free experience.</p>
+            <iframe src="https://drive.google.com/file/d/1y3nhbOf3fTLT04r0iBgw9ee9zArB33Gs/preview" allow="autoplay" allowfullscreen></iframe>
           </div>
         </div>
         <div class="home-detail" id="detail-chat-ends">
@@ -1258,16 +1269,18 @@
         audioContainer.appendChild(audio);
         messageDiv.appendChild(audioContainer);
       }
-      chatBox.appendChild(messageDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-      conversations[currentConversationId].messages.push({
-        type: 'bot',
-        text: text,
-        timestamp: new Date().toISOString(),
-        audioUrl: audioUrl
-      });
-      conversations[currentConversationId].timestamp = new Date().toISOString();
-      localStorage.setItem('conversations', JSON.stringify(conversations));
+      setTimeout(() => {
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        conversations[currentConversationId].messages.push({
+          type: 'bot',
+          text: text,
+          timestamp: new Date().toISOString(),
+          audioUrl: audioUrl
+        });
+        conversations[currentConversationId].timestamp = new Date().toISOString();
+        localStorage.setItem('conversations', JSON.stringify(conversations));
+      }, 1000);
     }
 
     function appendTypingIndicator() {
@@ -1373,7 +1386,7 @@
           if (response.ok) {
             const sentences = (data.reviewed_response || 'No response received.').split(/[.!?]\s+/).filter(s => s.trim() !== '');
             sentences.forEach((sentence, index) => {
-              setTimeout(() => appendBotMessage(sentence.trim(), data.audio_url), index * 300);
+              setTimeout(() => appendBotMessage(sentence.trim(), data.audio_url), (index + 1) * 1000);
             });
           } else {
             appendBotMessage("Sorry, there was an error processing your query. Please try again later.");
