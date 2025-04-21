@@ -1,5 +1,4 @@
 import warnings
-from pydantic import PydanticUserError
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -8,8 +7,8 @@ from pydantic import BaseModel
 from agent_checkpoint import run_agent
 import uvicorn
 
-# Suppress Pydantic callable warning
-warnings.filterwarnings("ignore", category=PydanticUserError)
+# Suppress Pydantic UserWarning
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
 app = FastAPI()
 
