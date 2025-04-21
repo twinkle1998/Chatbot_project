@@ -377,12 +377,14 @@
       margin-left: auto;
     }
     .message .bubble {
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 15px;
       font-size: 19.25px;
-      line-height: 1.4;
+      line-height: 1.5;
       max-width: 80%;
       display: inline-block;
+      border: 1px solid #E5E5E5;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
     .message.bot .bubble {
       background-color: #FFFFFF;
@@ -409,6 +411,7 @@
       border-top-right-radius: 0;
       display: flex;
       flex-direction: column;
+      border: 1px solid #D8BFD8;
     }
     .message.user .bubble .sender {
       font-weight: bold;
@@ -598,34 +601,6 @@
     .warning-dialog .action-btn:hover {
       background-color: #8A2BE2;
     }
-    .typing-indicator .bubble {
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding-right: 30px;
-    }
-    .typing-indicator .bubble span {
-      display: inline-block;
-      font-size: 19.25px;
-      color: #9932CC;
-      margin-right: 5px;
-      animation: float 1.5s infinite;
-    }
-    .typing-indicator .bubble span:nth-child(1) {
-      animation-delay: 0s;
-    }
-    .typing-indicator .bubble span:nth-child(2) {
-      animation-delay: 0.3s;
-    }
-    .typing-indicator .bubble span:nth-child(3) {
-      animation-delay: 0.6s;
-    }
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-      100% { transform: translateY(0); }
-    }
     /* Mobile-specific styles */
     @media screen and (max-width: 768px) {
       .chat-widget {
@@ -713,8 +688,8 @@
         padding: 12px;
       }
       .message .bubble {
-        font-size: 16px;
-        padding: 6px 10px;
+        font-size: 15px;
+        padding: 8px 12px;
         max-width: 85%;
       }
       .message.bot .audio-container audio {
@@ -766,9 +741,6 @@
       .warning-dialog .action-btn {
         font-size: 14px;
         padding: 6px 12px;
-      }
-      .typing-indicator .bubble span {
-        font-size: 16px;
       }
     }
   </style>
@@ -1059,19 +1031,18 @@
         messageDiv.className = `message ${msg.type}`;
         const bubbleDiv = document.createElement('div');
         bubbleDiv.className = 'bubble';
-        if (msg.type === 'bot') {
-          const senderSpan = document.createElement('span');
-          senderSpan.className = 'sender';
-          senderSpan.textContent = 'Chatbot';
-          bubbleDiv.appendChild(senderSpan);
-        } else {
-          const senderSpan = document.createElement('span');
-          senderSpan.className = 'sender';
-          senderSpan.textContent = 'You';
-          bubbleDiv.appendChild(senderSpan);
+        if (msg.type === 'bot' && lastSender === 'bot') {
+          bubbleDiv.style.borderTopLeftRadius = '15px';
         }
+        if (msg.type === 'user' && lastSender === 'user') {
+          bubbleDiv.style.borderTopRightRadius = '15px';
+        }
+        const senderSpan = document.createElement('span');
+        senderSpan.className = 'sender';
+        senderSpan.textContent = msg.type === 'bot' ? 'Chatbot' : 'You';
+        bubbleDiv.appendChild(senderSpan);
         const textSpan = document.createElement('span');
-        textSpan.textContent = msg.text;
+        textSpan.innerHTML = msg.text.replace(/\n/g, '<br>');
         bubbleDiv.appendChild(textSpan);
         messageDiv.appendChild(bubbleDiv);
         if (msg.type === 'user') {
@@ -1252,12 +1223,16 @@
       messageDiv.className = 'message bot';
       const bubbleDiv = document.createElement('div');
       bubbleDiv.className = 'bubble';
+      const lastMessage = chatBox.lastElementChild;
+      if (lastMessage && lastMessage.className === 'message bot') {
+        bubbleDiv.style.borderTopLeftRadius = '15px';
+      }
       const senderSpan = document.createElement('span');
       senderSpan.className = 'sender';
       senderSpan.textContent = 'Chatbot';
       bubbleDiv.appendChild(senderSpan);
       const textSpan = document.createElement('span');
-      textSpan.textContent = text;
+      textSpan.innerHTML = text.replace(/\n/g, '<br>');
       bubbleDiv.appendChild(textSpan);
       messageDiv.appendChild(bubbleDiv);
       if (audioUrl) {
@@ -1281,33 +1256,6 @@
         conversations[currentConversationId].timestamp = new Date().toISOString();
         localStorage.setItem('conversations', JSON.stringify(conversations));
       }, 1000);
-    }
-
-    function appendTypingIndicator() {
-      if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
-      const chatBox = document.getElementById('chat-box');
-      const messageDiv = document.createElement('div');
-      messageDiv.className = 'message bot';
-      messageDiv.id = 'typing-indicator';
-      const bubbleDiv = document.createElement('div');
-      bubbleDiv.className = 'bubble';
-      const senderSpan = document.createElement('span');
-      senderSpan.className = 'sender';
-      senderSpan.textContent = 'Chatbot';
-      bubbleDiv.appendChild(senderSpan);
-      const span = document.createElement('span');
-      span.innerHTML = '...';
-      bubbleDiv.appendChild(span);
-      messageDiv.appendChild(bubbleDiv);
-      chatBox.appendChild(messageDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function removeTypingIndicator() {
-      const typing = document.getElementById('typing-indicator');
-      if (typing) {
-        typing.remove();
-      }
     }
 
     async function sendMessage() {
@@ -1351,6 +1299,32 @@
       scrollToBottom();
     }
 
+    function groupSentences(sentences) {
+      if (sentences.length <= 4 && sentences.join(' ').length <= 300) {
+        return [sentences.join(' ')];
+      }
+      const grouped = [];
+      let currentGroup = [];
+      let currentLength = 0;
+      sentences.forEach(sentence => {
+        const sentenceLength = sentence.length;
+        if (currentLength + sentenceLength <= 150 && currentGroup.length < 2) {
+          currentGroup.push(sentence);
+          currentLength += sentenceLength;
+        } else {
+          if (currentGroup.length > 0) {
+            grouped.push(currentGroup.join(' '));
+          }
+          currentGroup = [sentence];
+          currentLength = sentenceLength;
+        }
+      });
+      if (currentGroup.length > 0) {
+        grouped.push(currentGroup.join(' '));
+      }
+      return grouped.slice(0, 3);
+    }
+
     async function handleMessage(message) {
       if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
       const convo = conversations[currentConversationId];
@@ -1374,7 +1348,6 @@
         convo.step = step;
       } else {
         const review = message;
-        appendTypingIndicator();
         try {
           const response = await fetch("/chat", {
             method: "POST",
@@ -1382,17 +1355,16 @@
             body: JSON.stringify({ name, date, product, review })
           });
           const data = await response.json();
-          removeTypingIndicator();
           if (response.ok) {
             const sentences = (data.reviewed_response || 'No response received.').split(/[.!?]\s+/).filter(s => s.trim() !== '');
-            sentences.forEach((sentence, index) => {
-              setTimeout(() => appendBotMessage(sentence.trim(), data.audio_url), (index + 1) * 1000);
+            const groupedResponses = groupSentences(sentences);
+            groupedResponses.forEach(responseText => {
+              appendBotMessage(responseText, data.audio_url && groupedResponses.indexOf(responseText) === groupedResponses.length - 1 ? data.audio_url : null);
             });
           } else {
             appendBotMessage("Sorry, there was an error processing your query. Please try again later.");
           }
         } catch (error) {
-          removeTypingIndicator();
           appendBotMessage("Unable to reach the server. Please check your connection and try again.");
         }
       }
