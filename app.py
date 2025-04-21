@@ -1,26 +1,49 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+from agent_checkpoint import run_agent
 import uvicorn
-from chatbot import ChatBot  # Importing the ChatBot class for the /chat endpoint
 
 app = FastAPI()
 
-# Root route for the "frontend" response
+# Mount the static directory to serve index.html
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Allow all origins (for local HTML frontend access)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Define the expected JSON format
+class ReviewRequest(BaseModel):
+    name: str
+    date: str
+    product: str
+    review: str
+
+@app.post("/chat")
+async def analyze_review(data: ReviewRequest):
+    input_data = {
+        "cust_name": data.name,
+        "purch_date": data.date,
+        "product": data.product,
+        "review": data.review
+    }
+    try:
+        result = run_agent(input_data)
+        return {"reviewed_response": result["reviewed_response"]}
+    except Exception as e:
+        return {"error": str(e)}
+
+# Serve index.html at the root
 @app.get("/")
-async def root():
-    return {"message": "Welcome to my chatbot project!"}
+async def serve_index():
+    return StaticFiles(directory="static", html=True).get_response("index.html")
 
-# Chat endpoint that uses the chatbot module
-@app.get("/chat")
-async def chat(message: str):
-    chatbot = ChatBot()
-    response = chatbot.get_response(message)
-    return {"response": response}
-
-# Favicon route to handle browser requests
-@app.get("/favicon.ico")
-async def favicon():
-    return {"detail": "No favicon available"}
-
-# Run the app with Uvicorn for Render deployment
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
