@@ -619,6 +619,148 @@
       50% { transform: translateY(-5px); }
       100% { transform: translateY(0); }
     }
+    /* Mobile-specific styles */
+    @media screen and (max-width: 768px) {
+      .chat-widget {
+        width: 95%;
+        height: 85vh;
+        max-height: 600px;
+        border-radius: 20px;
+        bottom: 80px;
+        right: 2.5%;
+        left: 2.5%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .chat-widget.active {
+        transform: scaleY(1);
+      }
+      .message-icon {
+        bottom: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+      }
+      .message-icon::before {
+        font-size: 20px;
+      }
+      .home-header {
+        padding: 15px;
+      }
+      .home-header h1 {
+        font-size: 24px;
+      }
+      .home-header h1 span {
+        font-size: 20px;
+      }
+      .home-body {
+        padding: 0 15px 15px 15px;
+      }
+      .home-detail-header h2 {
+        font-size: 18px;
+      }
+      .home-detail-content p {
+        font-size: 16px;
+        line-height: 1.4;
+      }
+      .search-bar {
+        font-size: 16px;
+        padding: 8px 12px;
+        background-size: 14px;
+      }
+      .search-result-header h2 {
+        font-size: 18px;
+      }
+      .search-result-content p {
+        font-size: 16px;
+      }
+      .recent-chats-label, .start-new-chat-label {
+        font-size: 14px;
+      }
+      .recent-message, .new-chat-option, .home-item {
+        font-size: 16px;
+        padding: 10px 12px;
+      }
+      .recent-message .arrow, .new-chat-option .arrow, .home-item .arrow {
+        font-size: 20px;
+      }
+      .messages-header {
+        padding: 10px 12px;
+        height: 50px;
+      }
+      .messages-header .back-arrow {
+        font-size: 20px;
+      }
+      .messages-header .header-title .title {
+        font-size: 18px;
+      }
+      .messages-header .header-title .subtext {
+        font-size: 14px;
+      }
+      .messages-header .download-icon {
+        font-size: 18px;
+      }
+      .messages-body {
+        padding: 12px;
+      }
+      .message .bubble {
+        font-size: 16px;
+        padding: 6px 10px;
+        max-width: 85%;
+      }
+      .message.bot .audio-container audio {
+        width: 80px;
+        height: 18px;
+      }
+      .message.user .timestamp {
+        font-size: 14px;
+      }
+      .messages-footer {
+        padding: 8px 12px;
+      }
+      .input-row input {
+        font-size: 16px;
+        padding: 6px 10px;
+      }
+      .send-btn, .mic-btn {
+        width: 28px;
+        height: 28px;
+      }
+      .send-btn img {
+        width: 14px;
+        height: 14px;
+      }
+      .navbar {
+        padding: 8px 0;
+      }
+      .navbar div {
+        font-size: 14px;
+      }
+      .navbar div svg {
+        width: 18px;
+        height: 18px;
+      }
+      .end-chat-btn {
+        font-size: 16px;
+        padding: 10px 12px;
+      }
+      .chat-ended-message {
+        font-size: 16px;
+      }
+      .warning-dialog {
+        font-size: 16px;
+        padding: 12px;
+      }
+      .warning-dialog .close-btn {
+        font-size: 14px;
+      }
+      .warning-dialog .action-btn {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
+      .typing-indicator .bubble span {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
