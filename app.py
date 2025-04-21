@@ -1,14 +1,20 @@
+import warnings
+from pydantic import PydanticUserError
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from agent_checkpoint import run_agent
 import uvicorn
 
+# Suppress Pydantic callable warning
+warnings.filterwarnings("ignore", category=PydanticUserError)
+
 app = FastAPI()
 
 # Mount the static directory to serve index.html
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
 # Allow all origins (for local HTML frontend access)
 app.add_middleware(
@@ -40,10 +46,10 @@ async def analyze_review(data: ReviewRequest):
     except Exception as e:
         return {"error": str(e)}
 
-# Serve index.html at the root
+# Redirect root to static index.html
 @app.get("/")
 async def serve_index():
-    return StaticFiles(directory="static", html=True).get_response("index.html")
+    return RedirectResponse(url="/static/index.html")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
