@@ -25,14 +25,14 @@
     .chat-widget {
       width: min(90vw, 496.8px);
       height: min(80vh, 717.6px);
-      background-color: #e6e6fa;
+      background-color: #FFFFFF;
       border-radius: 40px 40px 20px 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       display: none;
       flex-direction: column;
       position: fixed;
       bottom: max(10vh, 120px);
-      right: 3vw; /* Aligned with message-icon */
+      right: 3vw;
       z-index: 1000;
       transform: scaleY(0);
       transform-origin: bottom;
@@ -45,9 +45,18 @@
       animation: paperOpen 0.5s ease-in-out forwards;
     }
     @keyframes paperOpen {
-      0% { transform: scaleY(0); opacity: 0; }
-      50% { transform: scaleY(1.1); opacity: 0.5; }
-      100% { transform: scaleY(1); opacity: 1; }
+      0% {
+        transform: scaleY(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scaleY(1.1);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
     }
     .tab-section {
       display: none;
@@ -59,11 +68,11 @@
       display: flex;
     }
     .home-section {
-      background-color: #483d8b;
+      background-color: #4B0082;
     }
     .home-header {
       padding: 3vw;
-      color: #fff;
+      color: #FFFFFF;
     }
     .home-header h1 {
       font-size: clamp(1.53rem, 4.25vw, 1.7rem);
@@ -80,7 +89,7 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      background-color: #e6e6fa;
+      background-color: #FFFFFF;
     }
     .home-main {
       display: block;
@@ -90,7 +99,7 @@
     }
     .home-detail {
       display: none;
-      background-color: #f0f0ff;
+      background-color: #FFFFFF;
       border-radius: 10px;
       padding: 1.8vw;
       margin-bottom: 0.9vw;
@@ -110,18 +119,18 @@
     .home-detail-header .back-arrow {
       cursor: pointer;
       font-size: clamp(1.02rem, 2.55vw, 1.275rem);
-      color: #666;
+      color: #9932CC;
       margin-right: 1.35vw;
       display: block;
     }
     .home-detail-header h2 {
       font-size: clamp(1.02rem, 2.55vw, 1.19rem);
       font-weight: 600;
-      color: #000;
+      color: #333333;
     }
     .home-detail-content p {
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #333;
+      color: #333333;
       line-height: 1.5;
       margin-bottom: 0.9vw;
     }
@@ -130,7 +139,7 @@
     }
     .search-result {
       display: none;
-      background-color: #f0f0ff;
+      background-color: #FFFFFF;
       border-radius: 8px;
       padding: 1.8vw;
       margin-bottom: 0.9vw;
@@ -147,31 +156,31 @@
     .search-result-header h2 {
       font-size: clamp(1.02rem, 2.55vw, 1.19rem);
       font-weight: 600;
-      color: #000;
+      color: #333333;
     }
     .search-result-header .clear-search {
       cursor: pointer;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #6a5acd;
+      color: #9932CC;
     }
     .search-result-content p {
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #333;
+      color: #333333;
       line-height: 1.5;
       margin-bottom: 0.9vw;
     }
     .recent-chats-label {
       font-size: clamp(0.765rem, 1.7vw, 0.85rem);
-      color: #999;
+      color: #666666;
       margin-bottom: 0.45vw;
     }
     .recent-message {
-      background-color: #f0f0ff;
+      background-color: #E6E6FA;
       padding: 1.8vw 2.7vw;
       border-radius: 10px;
       margin-bottom: 0.9vw;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #000;
+      color: #333333;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -179,8 +188,8 @@
       transition: background-color 0.2s, color 0.2s;
     }
     .recent-message:hover {
-      background-color: #d8d8ff;
-      color: #6a5acd;
+      background-color: #D8BFD8;
+      color: #333333;
     }
     .recent-message img {
       width: clamp(0.85rem, 2.125vw, 1.02rem);
@@ -189,21 +198,21 @@
       border-radius: 50%;
     }
     .recent-message .arrow {
-      color: #6a5acd;
+      color: #9932CC;
       font-size: clamp(1.02rem, 2.55vw, 1.275rem);
     }
     .start-new-chat-label {
       font-size: clamp(0.765rem, 1.7vw, 0.85rem);
-      color: #999;
+      color: #666666;
       margin: 0.9vw 0 0.45vw 0;
     }
     .new-chat-option {
-      background-color: #f0f0ff;
+      background-color: #FFFFFF;
       padding: 1.8vw 2.7vw;
       border-radius: 10px;
       margin-bottom: 0.9vw;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #000;
+      color: #333333;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -211,16 +220,16 @@
       transition: background-color 0.2s, color 0.2s;
     }
     .new-chat-option.disabled {
-      background-color: #e0e0e0;
-      color: #999;
+      background-color: #E5E5E5;
+      color: #999999;
       cursor: not-allowed;
     }
     .new-chat-option:hover:not(.disabled) {
-      background-color: #d8d8ff;
-      color: #6a5acd;
+      background-color: #F5F5F5;
+      color: #9932CC;
     }
     .new-chat-option .arrow {
-      color: #6a5acd;
+      color: #9932CC;
       font-size: clamp(1.02rem, 2.55vw, 1.275rem);
     }
     .search-bar-container {
@@ -234,8 +243,8 @@
       border: none;
       border-radius: 20px;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #666;
-      background-color: #fff;
+      color: #333333;
+      background-color: #FFFFFF;
     }
     .search-icon {
       position: absolute;
@@ -247,15 +256,15 @@
       cursor: pointer;
     }
     .search-bar:hover::placeholder {
-      color: #6a5acd;
+      color: #9932CC;
     }
     .home-item {
-      background-color: #f0f0ff;
+      background-color: #FFFFFF;
       padding: 1.8vw 2.7vw;
       border-radius: 10px;
       margin-bottom: 0.9vw;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #000;
+      color: #333333;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -263,35 +272,35 @@
       transition: background-color 0.2s, color 0.2s;
     }
     .home-item:hover {
-      background-color: #d8d8ff;
-      color: #6a5acd;
+      background-color: #F5F5F5;
+      color: #9932CC;
     }
     .home-item .arrow {
-      color: #6a5acd;
+      color: #9932CC;
       font-size: clamp(1.02rem, 2.55vw, 1.275rem);
     }
     .pricing-link {
-      background-color: #f0f0ff;
+      background-color: #F5F5F5;
       padding: 1.8vw 2.7vw;
       border-radius: 10px;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #000;
+      color: #333333;
       cursor: pointer;
       transition: background-color 0.2s, color 0.2s;
     }
     .pricing-link:hover {
-      background-color: #d8d8ff;
-      color: #6a5acd;
+      background-color: #E5E5E5;
+      color: #9932CC;
     }
     .messages-header {
       padding: 1.8vw 2.7vw;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid #E5E5E5;
       position: sticky;
       top: 0;
-      background-color: #e6e6fa;
+      background-color: #FFFFFF;
       z-index: 1;
       flex-shrink: 0;
       height: clamp(8vh, 10vw, 63px);
@@ -303,7 +312,7 @@
     .messages-header .back-arrow {
       cursor: pointer;
       font-size: clamp(1.02rem, 2.55vw, 1.275rem);
-      color: #666;
+      color: #9932CC;
       margin-right: 1.35vw;
     }
     .messages-header .header-title {
@@ -315,7 +324,7 @@
       align-items: center;
       font-size: clamp(1.02rem, 2.55vw, 1.19rem);
       font-weight: 600;
-      color: #000;
+      color: #333333;
     }
     .messages-header .header-title .title img {
       width: clamp(0.68rem, 1.7vw, 0.85rem);
@@ -324,12 +333,12 @@
     }
     .messages-header .header-title .subtext {
       font-size: clamp(0.765rem, 1.7vw, 0.85rem);
-      color: #666;
+      color: #666666;
     }
     .messages-header .download-icon {
       cursor: pointer;
       font-size: clamp(1.02rem, 2.55vw, 1.19rem);
-      color: #666;
+      color: #9932CC;
       position: relative;
     }
     .messages-header .download-icon:hover::after {
@@ -337,8 +346,8 @@
       position: absolute;
       top: -4vh;
       right: 0;
-      background-color: #483D8B;
-      color: #fff;
+      background-color: #333333;
+      color: #FFFFFF;
       padding: 0.9vw 1.8vw;
       border-radius: 5px;
       font-size: clamp(0.68rem, 1.7vw, 0.765rem);
@@ -349,7 +358,7 @@
       flex: 1;
       padding: 1.8vw;
       overflow-y: auto;
-      background-color: #e6e6fa;
+      background-color: #FFFFFF;
       scroll-behavior: smooth;
       min-height: 0;
       height: 0;
@@ -358,15 +367,15 @@
       width: 6px;
     }
     .messages-body::-webkit-scrollbar-track {
-      background: #f1f1f1;
+      background: #E5E5E5;
       border-radius: 10px;
     }
     .messages-body::-webkit-scrollbar-thumb {
-      background: #888;
+      background: #999999;
       border-radius: 10px;
     }
     .messages-body::-webkit-scrollbar-thumb:hover {
-      background: #555;
+      background: #666666;
     }
     .message {
       margin-bottom: 1.8vw;
@@ -391,8 +400,8 @@
       display: inline-block;
     }
     .message.bot .bubble {
-      background-color: #f0f0ff;
-      color: #000;
+      background-color: #FFFFFF;
+      color: #333333;
       border-top-left-radius: 0;
       display: flex;
       flex-direction: column;
@@ -417,8 +426,8 @@
       height: clamp(13.5px, 4.5vw, 18px);
     }
     .message.user .bubble {
-      background-color: #6a5acd;
-      color: #fff;
+      background-color: #E6E6FA;
+      color: #333333;
       border-top-right-radius: 0;
       display: flex;
       flex-direction: column;
@@ -429,7 +438,7 @@
     }
     .message.user .timestamp {
       font-size: clamp(0.765rem, 1.7vw, 0.85rem);
-      color: #666;
+      color: #666666;
       align-self: flex-end;
       margin-top: 0.45vw;
     }
@@ -438,8 +447,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: #e6e6fa;
-      border-top: 1px solid #e0e0e0;
+      background-color: #FFFFFF;
+      border-top: 1px solid #E5E5E5;
       position: sticky;
       bottom: 0;
       z-index: 1;
@@ -460,16 +469,17 @@
     .input-row input {
       flex: 1;
       padding: 1.35vw 1.8vw;
-      border: 1px solid #e0e0e0;
+      border: 1px solid #E5E5E5;
       border-radius: 20px;
       outline: none;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
       margin-right: 1.35vw;
+      color: #333333;
     }
     .send-btn, .mic-btn {
       width: clamp(1.7rem, 5.4vw, 2.125rem);
       height: clamp(1.7rem, 5.4vw, 2.125rem);
-      background-color: #6a5acd;
+      background-color: #9932CC;
       border: none;
       border-radius: 50%;
       cursor: pointer;
@@ -482,16 +492,16 @@
       height: clamp(0.68rem, 1.7vw, 0.85rem);
     }
     .mic-btn:hover, .send-btn:hover {
-      background-color: #5a4ab5;
+      background-color: #8A2BE2;
     }
     .navbar {
       display: flex;
       justify-content: space-around;
       padding: 1.8vw 0;
-      background-color: #e6e6fa;
+      background-color: #FFFFFF;
       border-bottom-left-radius: 20px;
       border-bottom-right-radius: 20px;
-      border-top: 1px solid #e0e0e0;
+      border-top: 1px solid #E5E5E5;
       position: sticky;
       bottom: 0;
       z-index: 10;
@@ -503,23 +513,23 @@
       align-items: center;
       cursor: pointer;
       font-size: clamp(0.765rem, 1.7vw, 0.85rem);
-      color: #666;
+      color: #999999;
       padding: 0.9vw;
     }
     .navbar div:hover {
-      color: #6a5acd;
+      color: #9932CC;
     }
     .navbar div:hover svg path {
-      fill: #6a5acd;
+      fill: #9932CC;
     }
     .navbar div.active {
-      color: #6a5acd;
+      color: #9932CC;
     }
     .navbar div.active svg path {
-      fill: #6a5acd;
+      fill: #9932CC;
     }
     .navbar div svg path {
-      fill: #666;
+      fill: #999999;
     }
     .message-icon {
       position: fixed;
@@ -527,7 +537,7 @@
       right: 3vw;
       width: clamp(3rem, 8vw, 3.5rem);
       height: clamp(3rem, 8vw, 3.5rem);
-      background-color: #6a5acd;
+      background-color: #9932CC;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -539,50 +549,57 @@
     .message-icon::before {
       content: '\1F4AC';
       font-size: clamp(1.02rem, 2.55vw, 1.275rem);
-      color: #fff;
+      color: #FFFFFF;
     }
     .dialog-container {
-      background-color: #f0f0ff;
+      background-color: #FFFFFF;
       border-radius: 10px;
       padding: 1.8vw;
       margin-bottom: 0.9vw;
     }
     .end-chat-btn {
-      background-color: #f0f0ff;
+      background-color: #FFFFFF;
       padding: 1.8vw 2.7vw;
       border-radius: 10px;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #6a5acd;
+      color: #9932CC;
       text-align: center;
       cursor: pointer;
       margin: 0.9vw 0;
       transition: background-color 0.2s, color 0.2s;
     }
     .end-chat-btn:hover {
-      background-color: #d8d8ff;
+      background-color: #F5F5F5;
     }
     .chat-ended-message {
       text-align: center;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #6a5acd;
+      color: #9932CC;
       padding: 1.8vw;
     }
     .warning-dialog {
-      background-color: rgba(240, 240, 255, 0.95);
-      border: 1px solid #6a5acd;
+      background-color: rgba(230, 230, 250, 0.9);
+      border: 1px solid rgba(153, 50, 204, 0.3);
       border-radius: 12px;
       padding: 2.7vw;
       margin: 1.8vw 0;
       font-size: clamp(0.85rem, 2.125vw, 1.02rem);
-      color: #333;
+      color: #333333;
       text-align: center;
       position: relative;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       animation: fadeSlideIn 0.5s ease-out forwards;
+      backdrop-filter: blur(5px);
     }
     @keyframes fadeSlideIn {
-      0% { opacity: 0; transform: translateY(-20px); }
-      100% { opacity: 1; transform: translateY(0); }
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     .warning-dialog .close-btn {
       position: absolute;
@@ -590,16 +607,16 @@
       right: 0.9vw;
       cursor: pointer;
       font-size: clamp(0.765rem, 1.7vw, 0.85rem);
-      color: #666;
+      color: #666666;
       transition: color 0.2s;
     }
     .warning-dialog .close-btn:hover {
-      color: #6a5acd;
+      color: #9932CC;
     }
     .warning-dialog .action-btn {
       margin-top: 1.8vw;
-      background-color: #6a5acd;
-      color: #fff;
+      background-color: #9932CC;
+      color: #FFFFFF;
       padding: 1.35vw 2.7vw;
       border-radius: 20px;
       cursor: pointer;
@@ -608,7 +625,7 @@
       transition: background-color 0.2s;
     }
     .warning-dialog .action-btn:hover {
-      background-color: #5a4ab5;
+      background-color: #8A2BE2;
     }
     .typing-indicator .bubble {
       display: flex;
@@ -621,7 +638,7 @@
       display: inline-block;
       width: clamp(0.34rem, 0.85vw, 0.425rem);
       height: clamp(0.34rem, 0.85vw, 0.425rem);
-      background-color: #6a5acd;
+      background-color: #9932CC;
       border-radius: 50%;
       position: absolute;
       animation: slide 1.5s infinite;
@@ -680,13 +697,13 @@
       <div class="home-body">
         <div class="home-main" id="home-main">
           <div class="start-new-chat-label">Start New Chat</div>
-          <div class="new-chat-option" id="new-chat-option">
+          <div class="new-chat-option" id="new-chat-option" onclick="startNewChat()">
             <span>Share Your Feedback or Report an Issue</span>
             <span class="arrow">></span>
           </div>
           <div class="search-bar-container">
             <input type="text" class="search-bar" id="search-bar" placeholder="Search for help">
-            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%236a5acd' d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/></svg>" class="search-icon" onclick="searchHelp()" alt="Search">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%239932CC' d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/></svg>" class="search-icon" onclick="searchHelp()" alt="Search">
           </div>
           <div class="search-result" id="search-result">
             <div class="search-result-header">
@@ -781,11 +798,11 @@
       <div class="messages-footer" id="messages-footer">
         <div class="end-chat-btn" onclick="endChat()">End Chat</div>
         <div class="input-container">
-          <button class="mic-btn" onclick="startVoice()">🎤</button>
+          <button class="mic-btn" onclick="startVoice()">🎙️</button>
           <div class="input-row">
             <input type="text" id="user-input" placeholder="Message...">
             <button class="send-btn" onclick="sendMessage()">
-              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23fff' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
+              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
             </button>
           </div>
         </div>
@@ -793,11 +810,11 @@
     </div>
     <div class="navbar">
       <div id="home-tab" class="active">
-        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#6a5acd" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#9932CC" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         <span>Home</span>
       </div>
       <div id="messages-tab">
-        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#666" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#999999" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
         <span>Messages</span>
       </div>
     </div>
@@ -832,6 +849,11 @@
           loadConversationsList();
         }
       } else if (tab === 'home') {
+        if (currentConversationId && conversations[currentConversationId]) {
+          isChatActive = conversations[currentConversationId].active;
+        } else {
+          isChatActive = false;
+        }
         hideDetail();
         clearSearch();
         startTimestampUpdates();
@@ -854,19 +876,19 @@
       `;
       homeBody.insertBefore(warningDiv, homeBody.firstChild);
       homeBody.scrollTop = 0;
-      console.log('Warning dialog displayed');
     }
 
     function updateNewChatOptionState() {
       const newChatOption = document.getElementById('new-chat-option');
       if (isChatActive) {
         newChatOption.classList.add('disabled');
-        newChatOption.onclick = () => showWarningDialog();
+        newChatOption.onclick = () => {
+          showWarningDialog();
+        };
       } else {
         newChatOption.classList.remove('disabled');
         newChatOption.onclick = startNewChat;
       }
-      console.log('New chat option state updated:', { isChatActive });
     }
 
     function startNewChat() {
@@ -890,7 +912,6 @@
       switchTab('messages');
       resetMessagesTab();
       updateNewChatOptionState();
-      console.log('New chat started:', { conversationId: currentConversationId });
     }
 
     function endChat() {
@@ -904,7 +925,6 @@
         currentConversationId = null;
         switchTab('home');
         updateNewChatOptionState();
-        console.log('Chat ended:', { conversationId: currentConversationId });
       }
     }
 
@@ -1023,6 +1043,7 @@
           const diffMinutes = Math.floor(diffMs / 1000 / 60);
           const diffHours = Math.floor(diffMinutes / 60);
           const diffDays = Math.floor(diffHours / 24);
+
           if (diffMinutes < 1) {
             timeElement.textContent = 'Just now';
           } else if (diffMinutes < 60) {
@@ -1034,6 +1055,7 @@
           }
         });
       }
+
       updateTimestamps();
       setInterval(updateTimestamps, 60000);
     }
@@ -1054,10 +1076,12 @@
       const searchBar = document.getElementById('search-bar');
       const query = searchBar.value.trim();
       if (!query) return;
+
       const searchResult = document.getElementById('search-result');
       const searchResultContent = document.getElementById('search-result-content');
       searchResult.classList.add('active');
       searchResultContent.innerHTML = '<p>Loading...</p>';
+
       try {
         const response = await fetch("/chat", {
           method: "POST",
@@ -1097,13 +1121,6 @@
       }
     });
 
-    document.getElementById('user-input').addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        sendMessage();
-      }
-    });
-
     function resetMessagesTab() {
       const chatBox = document.getElementById('chat-box');
       chatBox.innerHTML = `
@@ -1134,15 +1151,21 @@
       footer.innerHTML = `
         <div class="end-chat-btn" onclick="endChat()">End Chat</div>
         <div class="input-container">
-          <button class="mic-btn" onclick="startVoice()">🎤</button>
+          <button class="mic-btn" onclick="startVoice()">🎙️</button>
           <div class="input-row">
             <input type="text" id="user-input" placeholder="Message...">
             <button class="send-btn" onclick="sendMessage()">
-              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23fff' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
+              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
             </button>
           </div>
         </div>
       `;
+      document.getElementById('user-input').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
     }
 
     function scrollToBottom() {
@@ -1316,11 +1339,13 @@
       const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
       recognition.lang = 'en-US';
       recognition.start();
+
       recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
         document.getElementById('user-input').value = transcript;
         sendMessage();
       };
+
       recognition.onerror = function(event) {
         appendBotMessage("Voice recognition error: " + event.error, null);
       };
@@ -1362,6 +1387,13 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
+
+    document.getElementById('user-input').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
 
     document.getElementById('home-tab').onclick = () => switchTab('home');
     document.getElementById('messages-tab').onclick = () => switchTab('messages');
