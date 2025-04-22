@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amazon Chatbot Widget</title>
+  <title>EmpathyBot ❤️</title>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
     body {
       margin: 0;
@@ -19,34 +19,27 @@
       justify-content: flex-end;
       align-items: flex-end;
       position: relative;
-      background: #fff;
+      background: #F7F9FC;
       overflow-x: hidden;
     }
     .chat-widget {
-      width: 496.8px;
-      height: 717.6px;
-      background-color: #FFFFFF;
-      border-radius: 40px 40px 20px 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      height: 600px;
+      background: linear-gradient(145deg, #FFFFFF, #F0F4F8);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       display: none;
       flex-direction: column;
       position: fixed;
-      bottom: 120px;
+      bottom: 265px;
       right: 20px;
       z-index: 1000;
-      transform: scaleY(0);
-      transform-origin: bottom;
-      transition: transform 0.5s ease-in-out;
+      transform: translateY(100%);
+      transition: transform 0.3s ease-in-out;
     }
     .chat-widget.active {
       display: flex;
-      transform: scaleY(1);
-      animation: paperOpen 0.5s ease-in-out forwards;
-    }
-    @keyframes paperOpen {
-      0% { transform: scaleY(0); opacity: 0; }
-      50% { transform: scaleY(1.1); opacity: 0.5; }
-      100% { transform: scaleY(1); opacity: 1; }
+      transform: translateY(0);
     }
     .tab-section {
       display: none;
@@ -58,28 +51,27 @@
       display: flex;
     }
     .home-section {
-      background-color: #4B0082;
+      background: #6B48FF;
     }
     .home-header {
-      padding: 20px;
+      padding: 16px;
       color: #FFFFFF;
     }
     .home-header h1 {
-      font-size: 33px;
-      font-weight: 600;
-      margin-bottom: 5px;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
     .home-header h1 span {
-      font-size: 27.5px;
+      font-size: 20px;
       font-weight: 400;
     }
     .home-body {
       flex: 1;
-      padding: 0 20px 20px 20px;
+      padding: 0 16px 16px 16px;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      background-color: #FFFFFF;
+      background: #FFFFFF;
+      border-radius: 0 0 16px 16px;
     }
     .home-main {
       display: block;
@@ -89,14 +81,12 @@
     }
     .home-detail {
       display: none;
-      background-color: #FFFFFF;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 10px;
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
       flex: 1;
       overflow-y: auto;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
     }
     .home-detail.active {
       display: block;
@@ -104,42 +94,31 @@
     .home-detail-header {
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
     .home-detail-header .back-arrow {
       cursor: pointer;
-      font-size: 24.75px;
-      color: #9932CC;
-      margin-right: 10px;
-      display: block;
+      font-size: 20px;
+      color: #6B48FF;
+      margin-right: 8px;
     }
     .home-detail-header h2 {
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 600;
-      color: #333333;
+      color: #1A202C;
     }
     .home-detail-content p {
-      font-size: 19.25px;
-      color: #333333;
+      font-size: 16px;
+      color: #4A5568;
       line-height: 1.5;
-      margin-bottom: 10px;
-    }
-    .home-detail-content p:last-child {
-      margin-bottom: 0;
-    }
-    .home-detail-content iframe {
-      width: 100%;
-      height: 200px;
-      border: 0;
-      border-radius: 8px;
-      margin-top: 10px;
+      margin-bottom: 8px;
     }
     .search-result {
       display: none;
-      background-color: #FFFFFF;
+      background: #FFFFFF;
       border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
     }
     .search-result.active {
       display: block;
@@ -148,147 +127,126 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
     .search-result-header h2 {
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 600;
-      color: #333333;
+      color: #1A202C;
     }
     .search-result-header .clear-search {
       cursor: pointer;
-      font-size: 19.25px;
-      color: #9932CC;
+      font-size: 16px;
+      color: #6B48FF;
     }
     .search-result-content p {
-      font-size: 19.25px;
-      color: #333333;
+      font-size: 16px;
+      color: #4A5568;
       line-height: 1.5;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .recent-chats-label {
-      font-size: 16.5px;
-      color: #666666;
-      margin-bottom: 5px;
+      font-size: 14px;
+      color: #718096;
+      margin-bottom: 4px;
     }
     .recent-message {
-      background-color: #E6E6FA;
-      padding: 12px 15px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      font-size: 19.25px;
-      color: #333333;
+      background: #F7FAFC;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 16px;
+      color: #1A202C;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
+      transition: background 0.2s;
     }
     .recent-message:hover {
-      background-color: #D8BFD8;
-      color: #333333;
-    }
-    .recent-message img {
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-      border-radius: 50%;
+      background: #E2E8F0;
     }
     .recent-message .arrow {
-      color: #9932CC;
-      font-size: 24.75px;
+      color: #6B48FF;
+      font-size: 20px;
     }
     .start-new-chat-label {
-      font-size: 16.5px;
-      color: #666666;
-      margin: 10px 0 5px 0;
+      font-size: 14px;
+      color: #718096;
+      margin: 8px 0 4px;
     }
     .new-chat-option {
-      background-color: #FFFFFF;
-      padding: 12px 15px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      font-size: 19.25px;
-      color: #333333;
+      background: #FFFFFF;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 16px;
+      color: #1A202C;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
+      transition: background 0.2s;
     }
     .new-chat-option.disabled {
-      background-color: #E5E5E5;
-      color: #999999;
+      background: #E2E8F0;
+      color: #A0AEC0;
       cursor: not-allowed;
     }
     .new-chat-option:hover:not(.disabled) {
-      background-color: #F5F5F5;
-      color: #9932CC;
+      background: #F7FAFC;
     }
     .new-chat-option .arrow {
-      color: #9932CC;
-      font-size: 24.75px;
+      color: #6B48FF;
+      font-size: 20px;
     }
     .search-bar {
       width: 100%;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 20px;
-      margin: 15px 0;
-      font-size: 19.25px;
-      color: #333333;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="%239932CC" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>') no-repeat 95% center;
+      padding: 8px 12px;
+      border: 1px solid #E2E8F0;
+      border-radius: 999px;
+      margin: 12px 0;
+      font-size: 16px;
+      color: #1A202C;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="%236B48FF" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>') no-repeat 95% center;
       background-size: 16px;
     }
-    .search-bar:hover::placeholder {
-      color: #9932CC;
+    .search-bar:focus {
+      outline: none;
+      border-color: #6B48FF;
     }
     .home-item {
-      background-color: #FFFFFF;
-      padding: 12px 15px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      font-size: 19.25px;
-      color: #333333;
+      background: #FFFFFF;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 16px;
+      color: #1A202C;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
+      transition: background 0.2s;
     }
     .home-item:hover {
-      background-color: #F5F5F5;
-      color: #9932CC;
+      background: #F7FAFC;
     }
     .home-item .arrow {
-      color: #9932CC;
-      font-size: 24.75px;
-    }
-    .pricing-link {
-      background-color: #F5F5F5;
-      padding: 12px 15px;
-      border-radius: 10px;
-      font-size: 19.25px;
-      color: #333333;
-      cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
-    }
-    .pricing-link:hover {
-      background-color: #E5E5E5;
-      color: #9932CC;
+      color: #6B48FF;
+      font-size: 20px;
     }
     .messages-header {
-      padding: 12px 15px;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #E5E5E5;
+      border-bottom: 1px solid #E2E8F0;
       position: sticky;
       top: 0;
-      background-color: #FFFFFF;
+      background: #FFFFFF;
       z-index: 1;
       flex-shrink: 0;
-      height: 63px;
+      height: 50px;
     }
     .messages-header .header-left {
       display: flex;
@@ -296,78 +254,58 @@
     }
     .messages-header .back-arrow {
       cursor: pointer;
-      font-size: 24.75px;
-      color: #9932CC;
-      margin-right: 10px;
+      font-size: 20px;
+      color: #6B48FF;
+      margin-right: 8px;
     }
     .messages-header .header-title {
       display: flex;
       flex-direction: column;
     }
     .messages-header .header-title .title {
-      display: flex;
-      align-items: center;
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 600;
-      color: #333333;
-    }
-    .messages-header .header-title .title img {
-      width: 16px;
-      height: 16px;
-      margin-right: 5px;
+      color: #1A202C;
     }
     .messages-header .header-title .subtext {
-      font-size: 16.5px;
-      color: #666666;
+      font-size: 14px;
+      color: #718096;
     }
     .messages-header .download-icon {
       cursor: pointer;
-      font-size: 22px;
-      color: #9932CC;
-      position: relative;
-    }
-    .messages-header .download-icon:hover::after {
-      content: "Download Transcript";
-      position: absolute;
-      top: -30px;
-      right: 0;
-      background-color: #333333;
-      color: #FFFFFF;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      white-space: nowrap;
-      z-index: 10;
+      font-size: 18px;
+      color: #6B48FF;
     }
     .messages-body {
       flex: 1;
-      padding: 15px;
+      padding: 12px;
       overflow-y: auto;
-      background-color: #FFFFFF;
+      background: #F7FAFC;
       scroll-behavior: smooth;
       min-height: 0;
-      height: 0;
     }
     .messages-body::-webkit-scrollbar {
       width: 6px;
     }
     .messages-body::-webkit-scrollbar-track {
-      background: #E5E5E5;
+      background: #E2E8F0;
       border-radius: 10px;
     }
     .messages-body::-webkit-scrollbar-thumb {
-      background: #999999;
+      background: #A0AEC0;
       border-radius: 10px;
     }
-    .messages-body::-webkit-scrollbar-thumb:hover {
-      background: #666666;
-    }
     .message {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       display: flex;
       align-items: flex-start;
       flex-direction: column;
       flex-shrink: 0;
+      opacity: 0;
+      animation: fadeIn 1.5s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
     .message.bot {
       align-self: flex-start;
@@ -377,501 +315,325 @@
       margin-left: auto;
     }
     .message .bubble {
-      padding: 10px 14px;
-      border-radius: 15px;
-      font-size: 19.25px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 16px;
       line-height: 1.5;
       max-width: 80%;
       display: inline-block;
-      border: 1px solid #E5E5E5;
+      border: 1px solid #E2E8F0;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
     .message.bot .bubble {
-      background-color: #FFFFFF;
-      color: #333333;
+      background: #FFFFFF;
+      color: #1A202C;
       border-top-left-radius: 0;
-      display: flex;
-      flex-direction: column;
     }
     .message.bot .bubble .sender {
-      font-weight: bold;
+      font-weight: 600;
       margin-bottom: 4px;
-    }
-    .message.bot .audio-container {
-      margin-left: 28px;
-      margin-top: 5px;
-    }
-    .message.bot .audio-container audio {
-      width: 100px;
-      height: 20px;
     }
     .message.user .bubble {
-      background-color: #E6E6FA;
-      color: #333333;
+      background: #6B48FF;
+      color: #FFFFFF;
       border-top-right-radius: 0;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid #D8BFD8;
     }
     .message.user .bubble .sender {
-      font-weight: bold;
+      font-weight: 600;
       margin-bottom: 4px;
     }
-    .message.user .timestamp {
-      font-size: 16.5px;
-      color: #666666;
-      align-self: flex-end;
-      margin-top: 4px;
+    .chat-date {
+      font-size: 14px;
+      color: #718096;
+      text-align: center;
+      margin: 8px 0;
+      background: #F7FAFC;
+      padding: 4px;
+      border-radius: 8px;
     }
     .messages-footer {
-      padding: 10px 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: #FFFFFF;
-      border-top: 1px solid #E5E5E5;
-      position: sticky;
-      bottom: 0;
-      z-index: 1;
+      padding: 12px;
+      background: #FFFFFF;
+      border-top: 1px solid #E2E8F0;
       flex-shrink: 0;
+    }
+    .end-chat-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #FF4D4F;
+      color: #FFFFFF;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+    }
+    .end-chat-btn:hover {
+      background: #E53E3E;
     }
     .input-container {
       display: flex;
-      flex-direction: row;
-      width: 100%;
-      gap: 8px;
       align-items: center;
+      background: #F7FAFC;
+      border-radius: 999px;
+      padding: 4px;
+      border: 1px solid #E2E8F0;
     }
     .input-row {
       display: flex;
       align-items: center;
       width: 100%;
     }
-    .input-row input {
+    #user-input {
       flex: 1;
+      border: none;
+      background: none;
       padding: 8px 12px;
-      border: 1px solid #E5E5E5;
-      border-radius: 20px;
+      font-size: 16px;
+      color: #1A202C;
       outline: none;
-      font-size: 19.25px;
-      margin-right: 10px;
-      color: #333333;
     }
     .send-btn, .mic-btn {
-      width: 30px;
-      height: 30px;
-      background-color: #9932CC;
+      background: #6B48FF;
       border: none;
       border-radius: 50%;
-      cursor: pointer;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      margin-left: 4px;
+      transition: background 0.2s;
     }
-    .send-btn img {
-      width: 16px;
-      height: 16px;
+    .send-btn:hover, .mic-btn:hover {
+      background: #5539CC;
     }
-    .mic-btn:hover, .send-btn:hover {
-      background-color: #8A2BE2;
+    .chat-ended-message {
+      text-align: center;
+      font-size: 14px;
+      color: #718096;
+      padding: 8px;
+    }
+    .audio-container {
+      margin-top: 8px;
+    }
+    .audio-container audio {
+      width: 100%;
+    }
+    .timestamp {
+      font-size: 12px;
+      color: #718096;
+      margin-top: 4px;
+      align-self: flex-end;
     }
     .navbar {
       display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      background-color: #FFFFFF;
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-      border-top: 1px solid #E5E5E5;
-      position: sticky;
-      bottom: 0;
-      z-index: 10;
-      flex-shrink: 0;
+      background: #FFFFFF;
+      border-top: 1px solid #E2E8F0;
+      padding: 8px 0;
     }
     .navbar div {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       cursor: pointer;
-      font-size: 16.5px;
-      color: #999999;
-      padding: 5px;
-    }
-    .navbar div:hover {
-      color: #9932CC;
-    }
-    .navbar div:hover svg path {
-      fill: #9932CC;
+      color: #A0AEC0;
+      font-size: 14px;
+      padding: 8px;
+      transition: color 0.2s;
     }
     .navbar div.active {
-      color: #9932CC;
+      color: #6B48FF;
     }
     .navbar div.active svg path {
-      fill: #9932CC;
+      fill: #6B48FF;
     }
-    .navbar div svg path {
-      fill: #999999;
+    .navbar div span {
+      margin-top: 4px;
     }
     .message-icon {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      width: 50px;
-      height: 50px;
-      background-color: #9932CC;
+      width: 60px;
+      height: 60px;
+      background: #6B48FF;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-    }
-    .message-icon::before {
-      content: '\1F4AC';
       font-size: 24px;
       color: #FFFFFF;
-    }
-    .dialog-container {
-      background-color: #FFFFFF;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 10px;
-    }
-    .end-chat-btn {
-      background-color: #FFFFFF;
-      padding: 12px 15px;
-      border-radius: 10px;
-      font-size: 19.25px;
-      color: #9932CC;
-      text-align: center;
       cursor: pointer;
-      margin: 10px 0;
-      transition: background-color 0.2s, color 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s;
+      z-index: 1000;
     }
-    .end-chat-btn:hover {
-      background-color: #F5F5F5;
-    }
-    .chat-ended-message {
-      text-align: center;
-      font-size: 19.25px;
-      color: #9932CC;
-      padding: 10px;
+    .message-icon:hover {
+      transform: scale(1.1);
     }
     .warning-dialog {
-      background-color: rgba(230, 230, 250, 0.9);
-      border: 1px solid rgba(153, 50, 204, 0.3);
-      border-radius: 12px;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 19.25px;
-      color: #333333;
-      text-align: center;
+      background: #FFF7ED;
+      border: 1px solid #FEEBC8;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
       position: relative;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      animation: fadeSlideIn 0.5s ease-out forwards;
-      backdrop-filter: blur(5px);
+      animation: slideIn 0.3s ease-in-out;
     }
-    @keyframes fadeSlideIn {
-      0% { opacity: 0; transform: translateY(-20px); }
-      100% { opacity: 1; transform: translateY(0); }
+    @keyframes slideIn {
+      from { transform: translateY(-10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     .warning-dialog .close-btn {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 8px;
+      right: 8px;
       cursor: pointer;
-      font-size: 16.5px;
-      color: #666666;
-      transition: color 0.2s;
+      font-size: 16px;
+      color: #ED8936;
     }
-    .warning-dialog .close-btn:hover {
-      color: #9932CC;
+    .warning-dialog p {
+      font-size: 14px;
+      color: #7B341E;
+      margin-bottom: 8px;
     }
     .warning-dialog .action-btn {
-      margin-top: 10px;
-      background-color: #9932CC;
-      color: #FFFFFF;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
       display: inline-block;
-      transition: background-color 0.2s;
+      padding: 6px 12px;
+      background: #ED8936;
+      color: #FFFFFF;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
     }
     .warning-dialog .action-btn:hover {
-      background-color: #8A2BE2;
+      background: #DD6B20;
     }
-    /* Mobile-specific styles */
-    @media screen and (max-width: 768px) {
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      justify-content: center;
+    }
+    .suggestion-btn {
+      background: #E2E8F0;
+      color: #1A202C;
+      border: none;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .suggestion-btn:hover {
+      background: #CBD5E0;
+    }
+    @media (max-width: 768px) {
       .chat-widget {
-        width: 95%;
-        height: 85vh;
-        max-height: 600px;
-        border-radius: 20px;
-        bottom: 80px;
-        right: 2.5%;
-        left: 2.5%;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      }
-      .chat-widget.active {
-        transform: scaleY(1);
+        width: 100%;
+        height: 80vh;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
       }
       .message-icon {
-        bottom: 15px;
-        right: 15px;
-        width: 45px;
-        height: 45px;
-      }
-      .message-icon::before {
-        font-size: 20px;
-      }
-      .home-header {
-        padding: 15px;
-      }
-      .home-header h1 {
-        font-size: 24px;
-      }
-      .home-header h1 span {
-        font-size: 20px;
-      }
-      .home-body {
-        padding: 0 15px 15px 15px;
-      }
-      .home-detail-header h2 {
-        font-size: 18px;
-      }
-      .home-detail-content p {
-        font-size: 16px;
-        line-height: 1.4;
-      }
-      .home-detail-content iframe {
-        height: 150px;
-      }
-      .search-bar {
-        font-size: 16px;
-        padding: 8px 12px;
-        background-size: 14px;
-      }
-      .search-result-header h2 {
-        font-size: 18px;
-      }
-      .search-result-content p {
-        font-size: 16px;
-      }
-      .recent-chats-label, .start-new-chat-label {
-        font-size: 14px;
-      }
-      .recent-message, .new-chat-option, .home-item {
-        font-size: 16px;
-        padding: 10px 12px;
-      }
-      .recent-message .arrow, .new-chat-option .arrow, .home-item .arrow {
-        font-size: 20px;
-      }
-      .messages-header {
-        padding: 10px 12px;
+        bottom: 10px;
+        right: 10px;
+        width: 50px;
         height: 50px;
-      }
-      .messages-header .back-arrow {
         font-size: 20px;
-      }
-      .messages-header .header-title .title {
-        font-size: 18px;
-      }
-      .messages-header .header-title .subtext {
-        font-size: 14px;
-      }
-      .messages-header .download-icon {
-        font-size: 18px;
-      }
-      .messages-body {
-        padding: 12px;
-      }
-      .message .bubble {
-        font-size: 15px;
-        padding: 8px 12px;
-        max-width: 85%;
-      }
-      .message.bot .audio-container audio {
-        width: 80px;
-        height: 18px;
-      }
-      .message.user .timestamp {
-        font-size: 14px;
-      }
-      .messages-footer {
-        padding: 8px 12px;
-      }
-      .input-row input {
-        font-size: 16px;
-        padding: 6px 10px;
-      }
-      .send-btn, .mic-btn {
-        width: 28px;
-        height: 28px;
-      }
-      .send-btn img {
-        width: 14px;
-        height: 14px;
-      }
-      .navbar {
-        padding: 8px 0;
-      }
-      .navbar div {
-        font-size: 14px;
-      }
-      .navbar div svg {
-        width: 18px;
-        height: 18px;
-      }
-      .end-chat-btn {
-        font-size: 16px;
-        padding: 10px 12px;
-      }
-      .chat-ended-message {
-        font-size: 16px;
-      }
-      .warning-dialog {
-        font-size: 16px;
-        padding: 12px;
-      }
-      .warning-dialog .close-btn {
-        font-size: 14px;
-      }
-      .warning-dialog .action-btn {
-        font-size: 14px;
-        padding: 6px 12px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="chat-widget" id="chat-widget">
-    <div class="tab-section home-section active" id="home-section">
+  <div id="chat-widget" class="chat-widget">
+    <div id="home-section" class="tab-section active">
       <div class="home-header">
-        <h1>Amazon Chatbot</h1>
-        <h1>Hi there <span>How can we help?</span></h1>
+        <h1>EmpathyBot <span>❤️</span></h1>
       </div>
       <div class="home-body">
-        <div class="home-main" id="home-main">
-          <div class="start-new-chat-label">Start New Chat</div>
-          <div class="new-chat-option" id="new-chat-option" onclick="startNewChat()">
-            <span>Share Your Feedback or Report an Issue</span>
+        <div id="home-main" class="home-main">
+          <input id="search-bar" class="search-bar" type="text" placeholder="Search for help...">
+          <div id="search-result" class="search-result">
+            <div class="search-result-header">
+              <h2>Search Results</h2>
+              <span class="clear-search" onclick="clearSearch()">Clear</span>
+            </div>
+            <div id="search-result-content" class="search-result-content"></div>
+          </div>
+          <div class="start-new-chat-label">Start a New Chat</div>
+          <div id="new-chat-option" class="new-chat-option" onclick="startNewChat()">
+            <span>New Chat</span>
             <span class="arrow">></span>
           </div>
-          <input type="text" class="search-bar" id="search-bar" placeholder="Search for help">
-          <div class="search-result" id="search-result">
-            <div class="search-result-header">
-              <h2>Search Result</h2>
-              <div class="clear-search" onclick="clearSearch()">Clear Search</div>
+          <div id="detail-faqs" class="home-detail">
+            <div class="home-detail-header">
+              <span class="back-arrow" onclick="hideDetail()">←</span>
+              <h2>Frequently Asked Questions</h2>
             </div>
-            <div class="search-result-content" id="search-result-content"></div>
-          </div>
-          <div class="home-item" onclick="showDetail('how-to-use')">
-            How to Use This Chatbot <span class="arrow">></span>
-          </div>
-          <div class="home-item" onclick="showDetail('chat-ends')">
-            When Chat Ends, Go to Home Page and Start New <span class="arrow">></span>
-          </div>
-          <div class="home-item" onclick="showDetail('recent-chats-24')">
-            Recent Chats Will Be Available for 24 Hours Only <span class="arrow">></span>
-          </div>
-          <div class="home-item" onclick="showDetail('ethical-content')">
-            Ethical Content Guidelines for Server Response <span class="arrow">></span>
-          </div>
-        </div>
-        <div class="home-detail" id="detail-how-to-use">
-          <div class="home-detail-header">
-            <div class="back-arrow" onclick="hideDetail()"><</div>
-            <h2>How to Use This Chatbot</h2>
-          </div>
-          <div class="home-detail-content">
-            <p>The Amazon Chatbot is designed to assist you with your shopping needs in a simple and intuitive way. To get started, click the message icon at the bottom-right corner of the screen to open the chat widget.</p>
-            <p>From the "Home" tab, select "Share Your Feedback or Report an Issue" to begin a new conversation, or explore helpful articles by clicking on options like "What is This Chatbot For?" or "Getting Started with Amazon Chatbot."</p>
-            <p>In the "Messages" tab, the chatbot will guide you step-by-step—first asking for your name, then the purchase date, the product, and finally your feedback or issue.</p>
-            <p>You can also use the search bar on the "Home" tab to quickly find help on specific topics, or use the microphone button to send voice messages for a hands-free experience.</p>
-            <iframe src="https://drive.google.com/file/d/1y3nhbOf3fTLT04r0iBgw9ee9zArB33Gs/preview" allow="autoplay" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="home-detail" id="detail-chat-ends">
-          <div class="home-detail-header">
-            <div class="back-arrow" onclick="hideDetail()"><</div>
-            <h2>When Chat Ends, Go to Home Page and Start New</h2>
-          </div>
-          <div class="home-detail-content">
-            <p>Once your conversation with the Amazon Chatbot concludes, you’ll be automatically directed back to the "Home" tab to ensure a seamless experience. This reset allows you to easily start a fresh chat without lingering on previous conversations.</p>
-            <p>To begin a new chat, simply click "Share Your Feedback or Report an Issue" again, and the chatbot will restart the process by asking for your name, purchase date, product, and feedback.</p>
-            <p>This feature ensures that each interaction is independent, keeping your experience organized and focused on your current needs.</p>
-          </div>
-        </div>
-        <div class="home-detail" id="detail-recent-chats-24">
-          <div class="home-detail-header">
-            <div class="back-arrow" onclick="hideDetail()"><</div>
-            <h2>Recent Chats Will Be Available for 24 Hours Only</h2>
-          </div>
-          <div class="home-detail-content">
-            <p>Your recent conversations with the Amazon Chatbot are conveniently displayed under the "Recent Chats" section on the "Home" tab, allowing you to revisit them if needed.</p>
-            <p>However, to maintain privacy and manage storage, these chats are only stored for 24 hours. After this period, they will automatically be removed from the recent chats list and local storage.</p>
-            <p>If you wish to continue a conversation after 24 hours, you’ll need to start a new chat by selecting "Share Your Feedback or Report an Issue." Be sure to save any important details from your chats elsewhere if you need them beyond this timeframe.</p>
-          </div>
-        </div>
-        <div class="home-detail" id="detail-ethical-content">
-          <div class="home-detail-header">
-            <div class="back-arrow" onclick="hideDetail()"><</div>
-            <h2>Ethical Content Guidelines for Server Response</h2>
-          </div>
-          <div class="home-detail-content">
-            <p>The Amazon Chatbot is committed to fostering a respectful and supportive environment, and as such, the server will only respond to messages that adhere to ethical content guidelines.</p>
-            <p>Please use polite and appropriate language when interacting with the chatbot, avoiding any offensive, discriminatory, or harmful content. For example, instead of saying, "This product is trash," try, "I’m not satisfied with this product because of its quality."</p>
-            <p>If your message contains inappropriate language, the server may not respond, and you’ll receive a message like, "Sorry, there was an error reaching the server. Please try again later." Let’s keep the conversation friendly and constructive to ensure the best experience for everyone.</p>
+            <div class="home-detail-content">
+              <p><strong>How do I track my order?</strong><br>Enter your order number in the chat, and I'll provide the latest tracking information.</p>
+              <p><strong>Can I cancel my order?</strong><br>Let me know your order details, and I'll guide you through the cancellation process if eligible.</p>
+              <p><strong>How do I return or replace an item?</strong><br>Share the order number and item details, and I'll assist with return or replacement options.</p>
+              <p><strong>How can I contact an agent?</strong><br>Request to speak to an agent in the chat, and I'll connect you with our support team.</p>
+              <p>For more details, please visit our <a href="https://www.amazon.com/gp/help/customer/display.html" target="_blank">Amazon Help Center</a>.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="tab-section messages-section" id="messages-section">
+    <div id="messages-section" class="tab-section">
       <div class="messages-header">
         <div class="header-left">
-          <div class="back-arrow" onclick="switchTab('home')"><</div>
+          <span class="back-arrow" onclick="switchTab('home')">←</span>
           <div class="header-title">
-            <div class="title">Amazon Chatbot</div>
-            <div class="subtext">We’re here to assist you</div>
+            <span class="title">EmpathyBot</span>
+            <span class="subtext">Amazon Support</span>
           </div>
         </div>
-        <div class="download-icon" onclick="downloadTranscript()">⋮</div>
+        <span class="download-icon" onclick="downloadTranscript()">⬇</span>
       </div>
-      <div class="messages-body" id="chat-box">
-        <div class="message bot">
-          <div class="bubble">
-            <span class="sender">Chatbot</span>
-            <span>Hi! What's your name?</span>
-          </div>
-        </div>
-      </div>
-      <div class="messages-footer" id="messages-footer">
+      <div id="chat-box" class="messages-body"></div>
+      <div id="messages-footer" class="messages-footer">
         <div class="end-chat-btn" onclick="endChat()">End Chat</div>
         <div class="input-container">
-          <button class="mic-btn" onclick="startVoice()">🎙️</button>
           <div class="input-row">
             <input type="text" id="user-input" placeholder="Message...">
             <button class="send-btn" onclick="sendMessage()">
-              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+            </button>
+            <button class="mic-btn" onclick="startVoice()">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.47 6 6.93V21h2v-3.07c3.39-.46 6-3.4 6-6.93h-2z"/></svg>
             </button>
           </div>
+        </div>
+        <div class="suggestions" id="suggestions" style="display: none;">
+          <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
+          <button class="suggestion-btn" onclick="showFAQ()">View FAQs</button>
         </div>
       </div>
     </div>
     <div class="navbar">
       <div id="home-tab" class="active">
-        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#9932CC" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#6B48FF" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         <span>Home</span>
       </div>
       <div id="messages-tab">
-        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#999999" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#A0AEC0" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
         <span>Messages</span>
       </div>
     </div>
   </div>
-  <div class="message-icon" onclick="toggleChat()"></div>
+  <div class="message-icon" onclick="toggleChat()">❤️</div>
 
   <script>
     let name = "";
@@ -916,9 +678,7 @@
     function showWarningDialog() {
       const homeBody = document.querySelector('#home-section .home-body');
       const existingWarning = document.querySelector('.warning-dialog');
-      if (existingWarning) {
-        existingWarning.remove();
-      }
+      if (existingWarning) existingWarning.remove();
       const warningDiv = document.createElement('div');
       warningDiv.className = 'warning-dialog';
       warningDiv.innerHTML = `
@@ -934,9 +694,7 @@
       const newChatOption = document.getElementById('new-chat-option');
       if (isChatActive) {
         newChatOption.classList.add('disabled');
-        newChatOption.onclick = () => {
-          showWarningDialog();
-        };
+        newChatOption.onclick = showWarningDialog;
       } else {
         newChatOption.classList.remove('disabled');
         newChatOption.onclick = startNewChat;
@@ -966,10 +724,28 @@
       updateNewChatOptionState();
     }
 
-    function endChat() {
+    async function endChat() {
       if (currentConversationId && conversations[currentConversationId]) {
+        appendBotMessage("Would you like to share any feedback before we end this chat? 😊");
+        const suggestions = document.getElementById('suggestions');
+        suggestions.style.display = 'flex';
+        suggestions.innerHTML = `
+          <button class="suggestion-btn" onclick="sendSuggestion('The service was great!')">The service was great!</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('It could be better.')">It could be better.</button>
+          <button class="suggestion-btn" onclick="confirmEndChat()">No feedback, end chat</button>
+        `;
+      }
+    }
+
+    async function confirmEndChat() {
+      if (currentConversationId && conversations[currentConversationId]) {
+        await fetch('/end_chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: currentConversationId })
+        });
         conversations[currentConversationId].active = false;
-        appendBotMessage("Chat ended. Start a new chat from the Home tab.", null);
+        appendBotMessage("Chat ended. Start a new chat from the Home tab. ❤️");
         const footer = document.getElementById('messages-footer');
         footer.innerHTML = `<div class="chat-ended-message">Chat ended</div>`;
         localStorage.setItem('conversations', JSON.stringify(conversations));
@@ -986,14 +762,7 @@
       const footer = document.getElementById('messages-footer');
       chatBox.innerHTML = '';
       footer.innerHTML = '';
-      const now = new Date();
       const conversationIds = Object.keys(conversations)
-        .filter(id => {
-          const timestamp = new Date(conversations[id].timestamp);
-          const diffMs = now - timestamp;
-          const diffHours = diffMs / (1000 * 60 * 60);
-          return diffHours <= 24;
-        })
         .sort((a, b) => new Date(conversations[b].timestamp) - new Date(conversations[a].timestamp));
       if (conversationIds.length > 0) {
         const label = document.createElement('div');
@@ -1024,7 +793,7 @@
       const conversation = conversations[conversationId];
       isChatActive = conversation.active;
       const chatBox = document.getElementById('chat-box');
-      chatBox.innerHTML = '';
+      chatBox.innerHTML = `<div class="chat-date">${new Date(conversation.timestamp).toLocaleDateString()}</div>`;
       let lastSender = null;
       conversation.messages.forEach(msg => {
         const messageDiv = document.createElement('div');
@@ -1032,14 +801,14 @@
         const bubbleDiv = document.createElement('div');
         bubbleDiv.className = 'bubble';
         if (msg.type === 'bot' && lastSender === 'bot') {
-          bubbleDiv.style.borderTopLeftRadius = '15px';
+          bubbleDiv.style.borderTopLeftRadius = '12px';
         }
         if (msg.type === 'user' && lastSender === 'user') {
-          bubbleDiv.style.borderTopRightRadius = '15px';
+          bubbleDiv.style.borderTopRightRadius = '12px';
         }
         const senderSpan = document.createElement('span');
         senderSpan.className = 'sender';
-        senderSpan.textContent = msg.type === 'bot' ? 'Chatbot' : 'You';
+        senderSpan.textContent = msg.type === 'bot' ? 'EmpathyBot' : 'You';
         bubbleDiv.appendChild(senderSpan);
         const textSpan = document.createElement('span');
         textSpan.innerHTML = msg.text.replace(/\n/g, '<br>');
@@ -1050,15 +819,6 @@
           timestamp.className = 'timestamp';
           timestamp.setAttribute('data-timestamp', msg.timestamp);
           messageDiv.appendChild(timestamp);
-        }
-        if (msg.audioUrl) {
-          const audioContainer = document.createElement('div');
-          audioContainer.className = 'audio-container';
-          const audio = document.createElement('audio');
-          audio.controls = true;
-          audio.src = msg.audioUrl;
-          audioContainer.appendChild(audio);
-          messageDiv.appendChild(audioContainer);
         }
         chatBox.appendChild(messageDiv);
         lastSender = msg.type;
@@ -1087,19 +847,12 @@
           const diffMinutes = Math.floor(diffMs / 1000 / 60);
           const diffHours = Math.floor(diffMinutes / 60);
           const diffDays = Math.floor(diffHours / 24);
-
-          if (diffMinutes < 1) {
-            timeElement.textContent = 'Just now';
-          } else if (diffMinutes < 60) {
-            timeElement.textContent = `${diffMinutes}m ago`;
-          } else if (diffHours < 24) {
-            timeElement.textContent = `${diffHours}h ago`;
-          } else {
-            timeElement.textContent = `${diffDays}d ago`;
-          }
+          if (diffMinutes < 1) timeElement.textContent = 'Just now';
+          else if (diffMinutes < 60) timeElement.textContent = `${diffMinutes}m ago`;
+          else if (diffHours < 24) timeElement.textContent = `${diffHours}h ago`;
+          else timeElement.textContent = `${diffDays}d ago`;
         });
       }
-
       updateTimestamps();
       setInterval(updateTimestamps, 60000);
     }
@@ -1120,12 +873,10 @@
       const searchBar = document.getElementById('search-bar');
       const query = searchBar.value.trim();
       if (!query) return;
-
       const searchResult = document.getElementById('search-result');
       const searchResultContent = document.getElementById('search-result-content');
       searchResult.classList.add('active');
       searchResultContent.innerHTML = '<p>Loading...</p>';
-
       try {
         const response = await fetch("/chat", {
           method: "POST",
@@ -1134,7 +885,8 @@
             name: "User",
             date: "Unknown",
             product: "Unknown",
-            review: query
+            input: query,
+            session_id: currentConversationId || Date.now().toString()
           })
         });
         const data = await response.json();
@@ -1167,10 +919,12 @@
 
     function resetMessagesTab() {
       const chatBox = document.getElementById('chat-box');
+      const date = new Date().toLocaleDateString();
       chatBox.innerHTML = `
+        <div class="chat-date">${date}</div>
         <div class="message bot">
           <div class="bubble">
-            <span class="sender">Chatbot</span>
+            <span class="sender">EmpathyBot</span>
             <span>Hi! What's your name?</span>
           </div>
         </div>
@@ -1194,13 +948,21 @@
       footer.innerHTML = `
         <div class="end-chat-btn" onclick="endChat()">End Chat</div>
         <div class="input-container">
-          <button class="mic-btn" onclick="startVoice()">🎙️</button>
           <div class="input-row">
             <input type="text" id="user-input" placeholder="Message...">
             <button class="send-btn" onclick="sendMessage()">
-              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+            </button>
+            <button class="mic-btn" onclick="startVoice()">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.47 6 6.93V21h2v-3.07c3.39-.46 6-3.4 6-6.93h-2z"/></svg>
             </button>
           </div>
+        </div>
+        <div class="suggestions" id="suggestions" style="display: none;">
+          <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
+          <button class="suggestion-btn" onclick="showFAQ()">View FAQs</button>
         </div>
       `;
       document.getElementById('user-input').addEventListener('keypress', function(event) {
@@ -1224,12 +986,12 @@
       const bubbleDiv = document.createElement('div');
       bubbleDiv.className = 'bubble';
       const lastMessage = chatBox.lastElementChild;
-      if (lastMessage && lastMessage.className === 'message bot') {
-        bubbleDiv.style.borderTopLeftRadius = '15px';
+      if (lastMessage && lastMessage.className.includes('message bot')) {
+        bubbleDiv.style.borderTopLeftRadius = '12px';
       }
       const senderSpan = document.createElement('span');
       senderSpan.className = 'sender';
-      senderSpan.textContent = 'Chatbot';
+      senderSpan.textContent = 'EmpathyBot';
       bubbleDiv.appendChild(senderSpan);
       const textSpan = document.createElement('span');
       textSpan.innerHTML = text.replace(/\n/g, '<br>');
@@ -1244,23 +1006,21 @@
         audioContainer.appendChild(audio);
         messageDiv.appendChild(audioContainer);
       }
-      setTimeout(() => {
-        chatBox.appendChild(messageDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        conversations[currentConversationId].messages.push({
-          type: 'bot',
-          text: text,
-          timestamp: new Date().toISOString(),
-          audioUrl: audioUrl
-        });
-        conversations[currentConversationId].timestamp = new Date().toISOString();
-        localStorage.setItem('conversations', JSON.stringify(conversations));
-      }, 1000);
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      conversations[currentConversationId].messages.push({
+        type: 'bot',
+        text: text,
+        timestamp: new Date().toISOString(),
+        audioUrl: audioUrl
+      });
+      conversations[currentConversationId].timestamp = new Date().toISOString();
+      localStorage.setItem('conversations', JSON.stringify(conversations));
     }
 
     async function sendMessage() {
       const input = document.getElementById('user-input');
-      const message = input.value.trim();
+      let message = input.value.trim();
       if (!message || !isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
       const chatBox = document.getElementById('chat-box');
       const userMessage = document.createElement('div');
@@ -1268,8 +1028,8 @@
       const bubbleDiv = document.createElement('div');
       bubbleDiv.className = 'bubble';
       const lastMessage = chatBox.lastElementChild;
-      if (lastMessage && lastMessage.className === 'message user') {
-        bubbleDiv.style.borderTopRightRadius = '15px';
+      if (lastMessage && lastMessage.className.includes('message user')) {
+        bubbleDiv.style.borderTopRightRadius = '12px';
       }
       const senderSpan = document.createElement('span');
       senderSpan.className = 'sender';
@@ -1299,68 +1059,33 @@
       scrollToBottom();
     }
 
-    function groupSentences(sentences) {
-      if (sentences.length <= 4 && sentences.join(' ').length <= 300) {
-        return [sentences.join(' ')];
-      }
-      const grouped = [];
-      let currentGroup = [];
-      let currentLength = 0;
-      sentences.forEach(sentence => {
-        const sentenceLength = sentence.length;
-        if (currentLength + sentenceLength <= 150 && currentGroup.length < 2) {
-          currentGroup.push(sentence);
-          currentLength += sentenceLength;
-        } else {
-          if (currentGroup.length > 0) {
-            grouped.push(currentGroup.join(' '));
-          }
-          currentGroup = [sentence];
-          currentLength = sentenceLength;
-        }
-      });
-      if (currentGroup.length > 0) {
-        grouped.push(currentGroup.join(' '));
-      }
-      return grouped.slice(0, 3);
-    }
-
     async function handleMessage(message) {
       if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
       const convo = conversations[currentConversationId];
       if (step === 0) {
-        name = message;
+        name = message.replace(/my name is /i, '').trim();
         convo.name = name;
-        appendBotMessage("Thanks, " + name + ". When did you purchase the product?");
+        appendBotMessage(`Dear ${name}, how may I help you today? 😊`);
         step++;
         convo.step = step;
-      } else if (step === 1) {
-        date = message;
-        convo.date = date;
-        appendBotMessage("Got it. What product did you purchase?");
-        step++;
-        convo.step = step;
-      } else if (step === 2) {
-        product = message;
-        convo.product = product;
-        appendBotMessage("Thanks! Now please describe your issue or feedback.");
-        step++;
-        convo.step = step;
+        const suggestions = document.getElementById('suggestions');
+        suggestions.style.display = 'flex';
       } else {
-        const review = message;
         try {
           const response = await fetch("/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, date, product, review })
+            body: JSON.stringify({
+              name,
+              date,
+              product,
+              input: message,
+              session_id: currentConversationId
+            })
           });
           const data = await response.json();
           if (response.ok) {
-            const sentences = (data.reviewed_response || 'No response received.').split(/[.!?]\s+/).filter(s => s.trim() !== '');
-            const groupedResponses = groupSentences(sentences);
-            groupedResponses.forEach(responseText => {
-              appendBotMessage(responseText, data.audio_url && groupedResponses.indexOf(responseText) === groupedResponses.length - 1 ? data.audio_url : null);
-            });
+            appendBotMessage(data.reviewed_response || 'No response received.');
           } else {
             appendBotMessage("Sorry, there was an error processing your query. Please try again later.");
           }
@@ -1371,28 +1096,35 @@
       localStorage.setItem('conversations', JSON.stringify(conversations));
     }
 
+    function sendSuggestion(suggestion) {
+      document.getElementById('user-input').value = suggestion;
+      sendMessage();
+    }
+
+    function showFAQ() {
+      showDetail('faqs');
+    }
+
     function startVoice() {
       const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
       recognition.lang = 'en-US';
       recognition.start();
-
       recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
         document.getElementById('user-input').value = transcript;
         sendMessage();
       };
-
       recognition.onerror = function(event) {
-        appendBotMessage("Voice recognition error: " + event.error, null);
+        appendBotMessage("Voice recognition error: " + event.error);
       };
     }
 
     function downloadTranscript() {
       if (!currentConversationId || !conversations[currentConversationId]) return;
       const convo = conversations[currentConversationId];
-      let transcript = "Amazon Chatbot Transcript\n\n";
+      let transcript = "EmpathyBot Transcript\n\n";
       convo.messages.forEach(msg => {
-        const sender = msg.type === 'bot' ? 'Chatbot' : 'You';
+        const sender = msg.type === 'bot' ? 'EmpathyBot' : 'You';
         transcript += `${sender}: ${msg.text}\n`;
         if (msg.type === 'user') {
           const timestamp = new Date(msg.timestamp);
@@ -1400,16 +1132,7 @@
           const diffMinutes = Math.floor(diffMs / 1000 / 60);
           const diffHours = Math.floor(diffMinutes / 60);
           const diffDays = Math.floor(diffHours / 24);
-          let timeText = '';
-          if (diffMinutes < 1) {
-            timeText = 'Just now';
-          } else if (diffMinutes < 60) {
-            timeText = `${diffMinutes}m ago`;
-          } else if (diffHours < 24) {
-            timeText = `${diffHours}h ago`;
-          } else {
-            timeText = `${diffDays}d ago`;
-          }
+          let timeText = diffMinutes < 1 ? 'Just now' : diffMinutes < 60 ? `${diffMinutes}m ago` : diffHours < 24 ? `${diffHours}h ago` : `${diffDays}d ago`;
           transcript += `(${timeText})\n`;
         }
       });
@@ -1417,19 +1140,12 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `chat_transcript_${currentConversationId}.txt`;
+      a.download = `empathybot_transcript_${currentConversationId}.txt`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
-
-    document.getElementById('user-input').addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        sendMessage();
-      }
-    });
 
     document.getElementById('home-tab').onclick = () => switchTab('home');
     document.getElementById('messages-tab').onclick = () => switchTab('messages');
