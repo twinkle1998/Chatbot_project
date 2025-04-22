@@ -37,7 +37,7 @@
       position: fixed;
       top: 0;
       width: 100%;
-      background: rgba(27, 37, 38, 0.7);
+      background: linear-gradient(rgba(31, 33, 41, 0.9) -34%, rgba(26, 28, 35, 0.9) 100%);
       backdrop-filter: blur(10px);
       padding: 20px 60px;
       display: flex;
@@ -107,7 +107,7 @@
       transform: translateX(-50%);
       width: 200%;
       max-width: 1200px;
-      height: calc(170vh - 120px);
+      height: calc(100vh - 120px);
       padding: 20px;
       z-index: 0;
       font-family: 'Poppins', 'Segoe UI', sans-serif;
@@ -237,7 +237,7 @@
       display: flex;
     }
     .home-section {
-      background: url('https://images.unsplash.com/photo-1503803548695-c2a7b4a5b875?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+      background: transparent;
     }
     .home-header {
       padding: 20px;
@@ -255,7 +255,7 @@
       margin-bottom: 5px;
       margin-left: 10px;
       margin-top: 30px;
-      color: #FFFFFF;
+      color: #000000;
     }
     .home-header h1 span {
       font-size: 27.5px;
@@ -276,10 +276,11 @@
       display: none;
     }
     .chat-container {
-      border: 1px solid #E5E5E5;
+      border: 1px solid rgba(0, 0, 0, 0.1);
       border-radius: 10px;
       padding: 10px;
       margin-bottom: 15px;
+      margin-top: 20px;
       background-color: #FFFFFF;
     }
     .home-detail {
@@ -363,7 +364,7 @@
     }
     .recent-chats-label {
       font-size: 16.5px;
-      color: #666666;
+      color: rgb(243, 156, 24);
       margin-bottom: 5px;
     }
     .recent-message {
@@ -381,7 +382,7 @@
     }
     .recent-message:hover {
       background-color: #F5F5F5;
-      color: #FFFF00;
+      color: rgb(243, 156, 24);
     }
     .recent-message img {
       width: 20px;
@@ -395,7 +396,7 @@
     }
     .start-new-chat-label {
       font-size: 16.5px;
-      color: #666666;
+      color: rgb(243, 156, 24);
       margin: 10px 0 5px 0;
     }
     .new-chat-option {
@@ -426,10 +427,13 @@
     }
     .faq-section {
       margin-top: 20px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      padding: 10px;
     }
     .faq-section h3 {
       font-size: 16.5px;
-      color: #666666;
+      color: rgb(243, 156, 24);
       margin-bottom: 10px;
     }
     .faq-item {
@@ -555,7 +559,7 @@
       position: absolute;
       top: -30px;
       right: 0;
-      background-color: #333333;
+      background-color: rgb(243, 156, 24);
       color: #FFFFFF;
       padding: 5px 10px;
       border-radius: 5px;
@@ -591,7 +595,7 @@
       color: #999999;
       text-align: center;
       margin: 8px 0;
-      background: #F5F5F5;
+      background: transparent;
       padding: 4px;
       border-radius: 8px;
     }
@@ -625,7 +629,7 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
     .message.bot .bubble {
-      background-color: #E5E5E5;
+      background-color: rgb(245, 245, 245);
       color: #000000;
       border-top-left-radius: 0;
       display: flex;
@@ -831,8 +835,8 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      width: 51px;
-      height: 51px;
+      width: 56px;
+      height: 56px;
       background-color: rgb(243, 156, 24);
       border-radius: 50%;
       display: flex;
@@ -841,12 +845,33 @@
       cursor: pointer;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       z-index: 1000;
-      animation: pulse 2s infinite;
+      animation: popUp 0.5s ease-out forwards;
+      transition: transform 0.3s ease-in-out;
     }
     .message-icon::before {
       content: '\1F4AC';
       font-size: 24px;
       color: #FFFFFF;
+    }
+    @keyframes popUp {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .message-icon:hover {
+      transform: scale(1.1);
+    }
+    .message-icon:active {
+      transform: scale(0.95);
     }
     @keyframes pulse {
       0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(243, 156, 24, 0.7); }
@@ -1074,12 +1099,9 @@
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="rgb(243, 156, 24)"/>
       </svg>
       EmpathyBot
-      <span>(Customer Service)</span>
     </div>
     <nav class="website-nav">
       <ul>
-        <li class="tab-link active" data-tab="home">Home</li>
-
       </ul>
     </nav>
   </header>
@@ -1172,14 +1194,14 @@
     <div class="tab-section home-section active" id="home-section">
       <div class="home-header">
         <svg class="logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="rgb(243, 156, 24)"/>
-        </svg>
-        <h1>Hey there</h1>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="rgb(243, 156, 24)"></path>
+          </svg>
+        <h1>Hey there, how can we help?</h1>
       </div>
       <div class="home-body">
         <div class="home-main" id="home-main">
           <div class="chat-container">
-            <div class="recent-chats-label">Recent Message</div>
+            <div class="recent-chats-label">Recent Chats</div>
             <div id="recent-messages"></div>
             <div class="start-new-chat-label">Start New Chat</div>
             <div class="new-chat-option" id="new-chat-option" onclick="startNewChat()">
@@ -1296,7 +1318,6 @@
           <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
           <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
           <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
-          <button class="suggestion-btn" onclick="sendSuggestion('View FAQs')">View FAQs</button>
         </div>
         <div class="end-chat-btn" onclick="endChat()">End Chat</div>
         <div class="input-container">
@@ -1492,16 +1513,17 @@
       const recentMessages = document.getElementById('recent-messages');
       recentMessages.innerHTML = '';
       const conversationIds = Object.keys(conversations)
-        .filter(id => conversations[id].active)
         .sort((a, b) => new Date(conversations[b].timestamp) - new Date(conversations[a].timestamp));
-      if (conversationIds.length > 0) {
-        const latestConversationId = conversationIds[0];
-        const convo = conversations[latestConversationId];
+      
+      // Check for ongoing chats first
+      const ongoingChat = conversationIds.find(id => conversations[id].active);
+      if (ongoingChat) {
+        const convo = conversations[ongoingChat];
         if (convo.lastMessage) {
           const messageDiv = document.createElement('div');
           messageDiv.className = 'recent-message';
           messageDiv.onclick = () => {
-            loadConversation(latestConversationId);
+            loadConversation(ongoingChat);
             switchTab('messages');
           };
           messageDiv.innerHTML = `
@@ -1511,6 +1533,27 @@
             <span class="arrow">></span>
           `;
           recentMessages.appendChild(messageDiv);
+        }
+      } else {
+        // If no ongoing chat, show the most recent ended chat
+        if (conversationIds.length > 0) {
+          const latestEndedChat = conversationIds[0];
+          const convo = conversations[latestEndedChat];
+          if (convo.lastMessage) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'recent-message';
+            messageDiv.onclick = () => {
+              loadConversation(latestEndedChat);
+              switchTab('messages');
+            };
+            messageDiv.innerHTML = `
+              <div style="display: flex; align-items: center;">
+                <span>${convo.lastMessage.slice(0, 20)}${convo.lastMessage.length > 20 ? '...' : ''}</span>
+              </div>
+              <span class="arrow">></span>
+            `;
+            recentMessages.appendChild(messageDiv);
+          }
         }
       }
     }
@@ -1694,7 +1737,6 @@
           <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
           <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
           <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
-          <button class="suggestion-btn" onclick="sendSuggestion('View FAQs')">View FAQs</button>
         </div>
         <div class="end-chat-btn" onclick="endChat()">End Chat</div>
         <div class="input-container">
