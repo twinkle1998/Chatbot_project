@@ -1442,40 +1442,27 @@
       loadRecentMessages();
     }
 
-    async function endChat() {
+    function endChat() {
       if (currentConversationId && conversations[currentConversationId]) {
-        try {
-          const response = await fetch('/end_chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ session_id: currentConversationId })
-          });
-          if (response.ok) {
-            conversations[currentConversationId].active = false;
-            appendBotMessage("Chat ended. Start a new chat from the Home tab. ❤️");
-            const contactInfo = document.createElement('div');
-            contactInfo.className = 'contact-info';
-            contactInfo.innerHTML = `
-              Customer Service Contact<br>
-              customerservice@amazon.com<br>
-              +1-800-123-4567<br>
-              123 Amazon Way, Seattle, WA 98101
-            `;
-            document.getElementById('chat-box').appendChild(contactInfo);
-            const footer = document.getElementById('messages-footer');
-            footer.innerHTML = `<div class="chat-ended-message">Chat ended</div>`;
-            localStorage.setItem('conversations', JSON.stringify(conversations));
-            isChatActive = false;
-            currentConversationId = null;
-            lastIntent = null;
-            updateNewChatOptionState();
-            loadRecentMessages();
-          } else {
-            appendBotMessage("Failed to end the chat. Please try again.");
-          }
-        } catch (error) {
-          appendBotMessage("Error ending the chat. Please check your connection and try again.");
-        }
+        conversations[currentConversationId].active = false;
+        appendBotMessage("Chat ended. Start a new chat from the Home tab. ❤️");
+        const contactInfo = document.createElement('div');
+        contactInfo.className = 'contact-info';
+        contactInfo.innerHTML = `
+          Customer Service Contact<br>
+          customerservice@amazon.com<br>
+          +1-800-123-4567<br>
+          123 Amazon Way, Seattle, WA 98101
+        `;
+        document.getElementById('chat-box').appendChild(contactInfo);
+        const footer = document.getElementById('messages-footer');
+        footer.innerHTML = `<div class="chat-ended-message">Chat ended</div>`;
+        localStorage.setItem('conversations', JSON.stringify(conversations));
+        isChatActive = false;
+        currentConversationId = null;
+        lastIntent = null;
+        updateNewChatOptionState();
+        loadRecentMessages();
       }
     }
 
@@ -1747,270 +1734,270 @@
     }
 
     function setupMessagesFooter() {
-          const footer = document.getElementById('messages-footer');
-          footer.innerHTML = `
-            <div class="suggestions" id="suggestions">
-              <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
-              <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
-              <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
-            </div>
-            <div class="end-chat-btn" onclick="endChat()">End Chat</div>
-            <div class="input-container">
-              <div class="input-row">
-                <button class="mic-btn" onclick="startVoice()">🎙️</button>
-                <input type="text" id="user-input" placeholder="Message...">
-                <button class="send-btn" onclick="sendMessage()">
-                  <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
-                </button>
-              </div>
-            </div>
-          `;
-          document.getElementById('user-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-              event.preventDefault();
-              sendMessage();
+              const footer = document.getElementById('messages-footer');
+              footer.innerHTML = `
+                <div class="suggestions" id="suggestions">
+                  <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
+                  <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
+                  <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
+                </div>
+                <div class="end-chat-btn" onclick="endChat()">End Chat</div>
+                <div class="input-container">
+                  <div class="input-row">
+                    <button class="mic-btn" onclick="startVoice()">🎙️</button>
+                    <input type="text" id="user-input" placeholder="Message...">
+                    <button class="send-btn" onclick="sendMessage()">
+                      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
+                    </button>
+                  </div>
+                </div>
+              `;
+              document.getElementById('user-input').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  sendMessage();
+                }
+              });
             }
-          });
-        }
 
-        function scrollToBottom() {
-          const chatBox = document.getElementById('chat-box');
-          chatBox.scrollTop = chatBox.scrollHeight;
-        }
+            function scrollToBottom() {
+              const chatBox = document.getElementById('chat-box');
+              chatBox.scrollTop = chatBox.scrollHeight;
+            }
 
-        function appendBotMessage(text, audioUrl) {
-          if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
-          const chatBox = document.getElementById('chat-box');
-          const typingIndicator = document.getElementById('typing-indicator');
-          if (typingIndicator) typingIndicator.remove();
+            function appendBotMessage(text, audioUrl) {
+              if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
+              const chatBox = document.getElementById('chat-box');
+              const typingIndicator = document.getElementById('typing-indicator');
+              if (typingIndicator) typingIndicator.remove();
 
-          const messageDiv = document.createElement('div');
-          messageDiv.className = 'message bot';
-          const bubbleDiv = document.createElement('div');
-          bubbleDiv.className = 'bubble';
-          const lastMessage = chatBox.lastElementChild;
-          if (lastMessage && lastMessage.className === 'message bot') {
-            bubbleDiv.style.borderTopLeftRadius = '15px';
-          }
-          const senderSpan = document.createElement('span');
-          senderSpan.className = 'sender';
-          senderSpan.textContent = 'EmpathyBot';
-          bubbleDiv.appendChild(senderSpan);
-          const textSpan = document.createElement('span');
-          textSpan.innerHTML = text.replace(/\n/g, '<br>');
-          bubbleDiv.appendChild(textSpan);
-          messageDiv.appendChild(bubbleDiv);
-          if (audioUrl) {
-            const audioContainer = document.createElement('div');
-            audioContainer.className = 'audio-container';
-            const audio = document.createElement('audio');
-            audio.controls = true;
-            audio.src = audioUrl;
-            audioContainer.appendChild(audio);
-            messageDiv.appendChild(audioContainer);
-          }
-          chatBox.appendChild(messageDiv);
-          chatBox.scrollTop = chatBox.scrollHeight;
-          conversations[currentConversationId].messages.push({
-            type: 'bot',
-            text: text,
-            timestamp: new Date().toISOString(),
-            audioUrl: audioUrl
-          });
-          conversations[currentConversationId].timestamp = new Date().toISOString();
-          localStorage.setItem('conversations', JSON.stringify(conversations));
-          isTyping = false;
-        }
+              const messageDiv = document.createElement('div');
+              messageDiv.className = 'message bot';
+              const bubbleDiv = document.createElement('div');
+              bubbleDiv.className = 'bubble';
+              const lastMessage = chatBox.lastElementChild;
+              if (lastMessage && lastMessage.className === 'message bot') {
+                bubbleDiv.style.borderTopLeftRadius = '15px';
+              }
+              const senderSpan = document.createElement('span');
+              senderSpan.className = 'sender';
+              senderSpan.textContent = 'EmpathyBot';
+              bubbleDiv.appendChild(senderSpan);
+              const textSpan = document.createElement('span');
+              textSpan.innerHTML = text.replace(/\n/g, '<br>');
+              bubbleDiv.appendChild(textSpan);
+              messageDiv.appendChild(bubbleDiv);
+              if (audioUrl) {
+                const audioContainer = document.createElement('div');
+                audioContainer.className = 'audio-container';
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                audio.src = audioUrl;
+                audioContainer.appendChild(audio);
+                messageDiv.appendChild(audioContainer);
+              }
+              chatBox.appendChild(messageDiv);
+              chatBox.scrollTop = chatBox.scrollHeight;
+              conversations[currentConversationId].messages.push({
+                type: 'bot',
+                text: text,
+                timestamp: new Date().toISOString(),
+                audioUrl: audioUrl
+              });
+              conversations[currentConversationId].timestamp = new Date().toISOString();
+              localStorage.setItem('conversations', JSON.stringify(conversations));
+              isTyping = false;
+            }
 
-        function showTypingIndicator() {
-          if (isTyping) return;
-          isTyping = true;
-          const chatBox = document.getElementById('chat-box');
-          const typingDiv = document.createElement('div');
-          typingDiv.id = 'typing-indicator';
-          typingDiv.className = 'typing-indicator';
-          typingDiv.innerHTML = `
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-          `;
-          chatBox.appendChild(typingDiv);
-          chatBox.scrollTop = chatBox.scrollHeight;
-        }
+            function showTypingIndicator() {
+              if (isTyping) return;
+              isTyping = true;
+              const chatBox = document.getElementById('chat-box');
+              const typingDiv = document.createElement('div');
+              typingDiv.id = 'typing-indicator';
+              typingDiv.className = 'typing-indicator';
+              typingDiv.innerHTML = `
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              `;
+              chatBox.appendChild(typingDiv);
+              chatBox.scrollTop = chatBox.scrollHeight;
+            }
 
-        async function sendMessage() {
-          const input = document.getElementById('user-input');
-          const message = input.value.trim();
-          if (!message || !isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
-          const chatBox = document.getElementById('chat-box');
-          const userMessage = document.createElement('div');
-          userMessage.className = 'message user';
-          const bubbleDiv = document.createElement('div');
-          bubbleDiv.className = 'bubble';
-          const lastMessage = chatBox.lastElementChild;
-          if (lastMessage && lastMessage.className === 'message user') {
-            bubbleDiv.style.borderTopRightRadius = '15px';
-          }
-          const senderSpan = document.createElement('span');
-          senderSpan.className = 'sender';
-          senderSpan.textContent = 'You';
-          bubbleDiv.appendChild(senderSpan);
-          const textSpan = document.createElement('span');
-          textSpan.textContent = message;
-          bubbleDiv.appendChild(textSpan);
-          userMessage.appendChild(bubbleDiv);
-          const timestamp = document.createElement('span');
-          timestamp.className = 'timestamp';
-          timestamp.setAttribute('data-timestamp', new Date().toISOString());
-          timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          userMessage.appendChild(timestamp);
-          chatBox.appendChild(userMessage);
-          input.value = '';
-          conversations[currentConversationId].messages.push({
-            type: 'user',
-            text: message,
-            timestamp: new Date().toISOString(),
-            showTimestamp: true
-          });
-          conversations[currentConversationId].lastMessage = message;
-          conversations[currentConversationId].timestamp = new Date().toISOString();
-          localStorage.setItem('conversations', JSON.stringify(conversations));
-          showTypingIndicator();
-          await handleMessage(message);
-          scrollToBottom();
-        }
+            async function sendMessage() {
+              const input = document.getElementById('user-input');
+              const message = input.value.trim();
+              if (!message || !isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
+              const chatBox = document.getElementById('chat-box');
+              const userMessage = document.createElement('div');
+              userMessage.className = 'message user';
+              const bubbleDiv = document.createElement('div');
+              bubbleDiv.className = 'bubble';
+              const lastMessage = chatBox.lastElementChild;
+              if (lastMessage && lastMessage.className === 'message user') {
+                bubbleDiv.style.borderTopRightRadius = '15px';
+              }
+              const senderSpan = document.createElement('span');
+              senderSpan.className = 'sender';
+              senderSpan.textContent = 'You';
+              bubbleDiv.appendChild(senderSpan);
+              const textSpan = document.createElement('span');
+              textSpan.textContent = message;
+              bubbleDiv.appendChild(textSpan);
+              userMessage.appendChild(bubbleDiv);
+              const timestamp = document.createElement('span');
+              timestamp.className = 'timestamp';
+              timestamp.setAttribute('data-timestamp', new Date().toISOString());
+              timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              userMessage.appendChild(timestamp);
+              chatBox.appendChild(userMessage);
+              input.value = '';
+              conversations[currentConversationId].messages.push({
+                type: 'user',
+                text: message,
+                timestamp: new Date().toISOString(),
+                showTimestamp: true
+              });
+              conversations[currentConversationId].lastMessage = message;
+              conversations[currentConversationId].timestamp = new Date().toISOString();
+              localStorage.setItem('conversations', JSON.stringify(conversations));
+              showTypingIndicator();
+              await handleMessage(message);
+              scrollToBottom();
+            }
 
-        function groupSentences(sentences) {
-          if (sentences.length <= 2 && sentences.join(' ').length <= 500) {
-            return [sentences.join(' ')];
-          }
-          const grouped = [];
-          let currentGroup = [];
-          let currentLength = 0;
-          sentences.forEach(sentence => {
-            const sentenceLength = sentence.length;
-            if (currentLength + sentenceLength <= 300 && currentGroup.length < 2) {
-              currentGroup.push(sentence);
-              currentLength += sentenceLength;
-            } else {
+            function groupSentences(sentences) {
+              if (sentences.length <= 2 && sentences.join(' ').length <= 500) {
+                return [sentences.join(' ')];
+              }
+              const grouped = [];
+              let currentGroup = [];
+              let currentLength = 0;
+              sentences.forEach(sentence => {
+                const sentenceLength = sentence.length;
+                if (currentLength + sentenceLength <= 300 && currentGroup.length < 2) {
+                  currentGroup.push(sentence);
+                  currentLength += sentenceLength;
+                } else {
+                  if (currentGroup.length > 0) {
+                    grouped.push(currentGroup.join(' '));
+                  }
+                  currentGroup = [sentence];
+                  currentLength = sentenceLength;
+                }
+              });
               if (currentGroup.length > 0) {
                 grouped.push(currentGroup.join(' '));
               }
-              currentGroup = [sentence];
-              currentLength = sentenceLength;
+              return grouped.slice(0, 2);
             }
-          });
-          if (currentGroup.length > 0) {
-            grouped.push(currentGroup.join(' '));
-          }
-          return grouped.slice(0, 2);
-        }
 
-        async function handleMessage(message) {
-          if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
-          const convo = conversations[currentConversationId];
-          const intent = detectIntent(message);
+            async function handleMessage(message) {
+              if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
+              const convo = conversations[currentConversationId];
+              const intent = detectIntent(message);
 
-          if (intent === 'agent') {
-            appendBotMessage("Please contact our customer service team at customerservice@amazon.com or +1-800-123-4567. They're ready to assist you! 😊");
-            await endChat();
-            return;
-          }
-
-          if (step === 0) {
-            name = message;
-            convo.name = name;
-            appendBotMessage(`Thanks, ${name}. When did you purchase the product?`);
-            step++;
-            lastIntent = null;
-          } else if (step === 1) {
-            date = message;
-            convo.date = date;
-            appendBotMessage("Got it. What product did you purchase?");
-            step++;
-            lastIntent = null;
-          } else if (step === 2) {
-            product = message;
-            convo.product = product;
-            appendBotMessage("Thanks! Now please describe your issue or feedback.");
-            step++;
-            lastIntent = null;
-          } else {
-            try {
-              const response = await fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  name,
-                  date,
-                  product,
-                  input: message,
-                  session_id: currentConversationId,
-                  intent: intent,
-                  last_intent: lastIntent
-                })
-              });
-              const data = await response.json();
-              if (response.ok) {
-                const sentences = (data.reviewed_response || 'No response received.').split(/[.!?]\s+/).filter(s => s.trim() !== '');
-                const groupedResponses = groupSentences(sentences);
-                groupedResponses.forEach(responseText => {
-                  appendBotMessage(responseText, data.audio_url && groupedResponses.indexOf(responseText) === groupedResponses.length - 1 ? data.audio_url : null);
-                });
-              } else {
-                appendBotMessage("Sorry, there was an error processing your query. Please try again later.");
+              if (intent === 'agent') {
+                appendBotMessage("Please contact our customer service team at customerservice@amazon.com or +1-800-123-4567. They're ready to assist you! 😊");
+                endChat();
+                return;
               }
-            } catch (error) {
-              appendBotMessage("Unable to reach the server. Please check your connection and try again.");
+
+              if (step === 0) {
+                name = message;
+                convo.name = name;
+                appendBotMessage(`Thanks, ${name}. When did you purchase the product?`);
+                step++;
+                lastIntent = null;
+              } else if (step === 1) {
+                date = message;
+                convo.date = date;
+                appendBotMessage("Got it. What product did you purchase?");
+                step++;
+                lastIntent = null;
+              } else if (step === 2) {
+                product = message;
+                convo.product = product;
+                appendBotMessage("Thanks! Now please describe your issue or feedback.");
+                step++;
+                lastIntent = null;
+              } else {
+                try {
+                  const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      name,
+                      date,
+                      product,
+                      input: message,
+                      session_id: currentConversationId,
+                      intent: intent,
+                      last_intent: lastIntent
+                    })
+                  });
+                  const data = await response.json();
+                  if (response.ok) {
+                    const sentences = (data.reviewed_response || 'No response received.').split(/[.!?]\s+/).filter(s => s.trim() !== '');
+                    const groupedResponses = groupSentences(sentences);
+                    groupedResponses.forEach(responseText => {
+                      appendBotMessage(responseText, data.audio_url && groupedResponses.indexOf(responseText) === groupedResponses.length - 1 ? data.audio_url : null);
+                    });
+                  } else {
+                    appendBotMessage("Sorry, there was an error processing your query. Please try again later.");
+                  }
+                } catch (error) {
+                  appendBotMessage("Unable to reach the server. Please check your connection and try again.");
+                }
+              }
+              lastIntent = intent;
+              convo.step = step;
+              convo.lastIntent = lastIntent;
+              localStorage.setItem('conversations', JSON.stringify(conversations));
             }
-          }
-          lastIntent = intent;
-          convo.step = step;
-          convo.lastIntent = lastIntent;
-          localStorage.setItem('conversations', JSON.stringify(conversations));
-        }
 
-        function startVoice() {
-          const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-          recognition.lang = 'en-US';
-          recognition.start();
+            function startVoice() {
+              const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+              recognition.lang = 'en-US';
+              recognition.start();
 
-          recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            document.getElementById('user-input').value = transcript;
-            sendMessage();
-          };
+              recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('user-input').value = transcript;
+                sendMessage();
+              };
 
-          recognition.onerror = function(event) {
-            appendBotMessage("Voice recognition error: " + event.error);
-          };
-        }
-
-        function downloadTranscript() {
-          if (!currentConversationId || !conversations[currentConversationId]) return;
-          const convo = conversations[currentConversationId];
-          let transcript = "EmpathyBot Transcript\n\n";
-          convo.messages.forEach(msg => {
-            const sender = msg.type === 'bot' ? 'EmpathyBot' : 'You';
-            transcript += `${sender}: ${msg.text}\n`;
-            if (msg.type === 'user') {
-              const timestamp = new Date(msg.timestamp);
-              transcript += `(${timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})\n`;
+              recognition.onerror = function(event) {
+                appendBotMessage("Voice recognition error: " + event.error);
+              };
             }
-          });
-          const blob = new Blob([transcript], { type: 'text/plain' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `empathybot_transcript_${currentConversationId}.txt`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        }
 
-        document.getElementById('home-tab').onclick = () => switchTab('home');
-        document.getElementById('messages-tab').onclick = () => switchTab('messages');
-      </script>
+            function downloadTranscript() {
+              if (!currentConversationId || !conversations[currentConversationId]) return;
+              const convo = conversations[currentConversationId];
+              let transcript = "EmpathyBot Transcript\n\n";
+              convo.messages.forEach(msg => {
+                const sender = msg.type === 'bot' ? 'EmpathyBot' : 'You';
+                transcript += `${sender}: ${msg.text}\n`;
+                if (msg.type === 'user') {
+                  const timestamp = new Date(msg.timestamp);
+                  transcript += `(${timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})\n`;
+                }
+              });
+              const blob = new Blob([transcript], { type: 'text/plain' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `empathybot_transcript_${currentConversationId}.txt`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }
+
+            document.getElementById('home-tab').onclick = () => switchTab('home');
+            document.getElementById('messages-tab').onclick = () => switchTab('messages');
+          </script>
 </body>
 </html>
