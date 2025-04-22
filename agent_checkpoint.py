@@ -18,7 +18,7 @@ customer_service_contact = {
     "email": "customerservice@amazon.com",
     "phone": "+1-800-123-4567",
     "address": "123 Amazon Way, Seattle, WA 98101",
-}
+} 
 
 # Sentiment considerations
 positive_considerations = [
