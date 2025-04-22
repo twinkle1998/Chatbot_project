@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
-from agent_checkpoint import run_agent
+from agent_checkpoint import run_agent, end_session
 import uvicorn
 
 # Suppress Pydantic UserWarning
@@ -34,6 +34,10 @@ class ChatRequest(BaseModel):
     intent: str = "review"
     last_intent: str | None = None
 
+# Define the expected JSON format for /end_chat endpoint
+class EndChatRequest(BaseModel):
+    session_id: str
+
 @app.post("/chat")
 async def analyze_review(data: ChatRequest):
     input_data = {
@@ -48,6 +52,14 @@ async def analyze_review(data: ChatRequest):
     try:
         result = run_agent(input_data)
         return {"reviewed_response": result["reviewed_response"]}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/end_chat")
+async def terminate_session(data: EndChatRequest):
+    try:
+        result = end_session(data.session_id)
+        return result
     except Exception as e:
         return {"error": str(e)}
 
