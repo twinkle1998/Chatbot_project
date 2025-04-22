@@ -33,7 +33,7 @@ negative_considerations = [
     "Apologize for the issue.",
     "Thank the customer for sharing dissatisfaction and acknowledge feedback.",
     "Elaborate on the issue (e.g., product quality, delivery issues).",
-    "Offer a potential solution based on the return policy."
+    "Offer a potential solution."
 ]
 
 neutral_considerations = [
@@ -80,11 +80,13 @@ intent_expectations = [
 # Common response guidelines
 common_response_guidelines = [
     "Never say i cannot help you or i am not able to help you",
+    "You do not need to address the customer by name",
+    "Do not give any greetings or salutations in the response, just start with the response",
     "keep in mind that you need to reply in the same language as the review",
     "Do not answer questions that involve offensive language, illegal activities, sensitive information, manipulative intent, or are vague and nonsensical, and politely reject, ask for clarification, or redirect as needed.",
     "Keep it warm, personal, and sweet, like you're chatting with a best friend",
     "If the review is unclear, ask for more details with light humor",
-    "Offer solutions or help in a casual, enthusiastic, and approachable way.",
+    "Offer solutions or help in a casual, enthusiasm, and approachable way.",
     "Make it easy to read: use short sentences, simple warm words, and a friendly tone",
     "Is is mandatory to make your response easy to read: use short sentences, clear separation between paragraphs, and a friendly tone",
     "use maximum 25 words per sentence",
@@ -238,9 +240,10 @@ def run_agent(agent_input):
     response_task = Task(
         description=(
             f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}', current date:'{current_date}'. "
+            f"Order guideline: {order_inquiry} "
             f"Generate a tailored response for the input: '{review}' with intent: '{intent}'. "
             f"Previous intent: '{last_intent or 'none'}'. "
-            f"Follow guidelines based on sentiment or intent:\n"
+            f"Follow sentiment-specific guidelines:\n"
             f"- Positive: {', '.join(positive_considerations)}\n"
             f"- Negative: {', '.join(negative_considerations)}\n"
             f"- Neutral: {', '.join(neutral_considerations)}\n"
@@ -258,11 +261,11 @@ def run_agent(agent_input):
         expected_output=(
             "A response string with the following characteristics:\n"
             f"- {', '.join(common_response_guidelines)}\n"
-            f"- Follow return policy: {return_policy['policy']} and conditions: {return_policy['conditions']}\n"
+            f"you need to decide whether customer eligible for return or not by following the {return_policy['policy']} and {return_policy['conditions']} guideline \n"
             f"- Follow order inquiry guidelines: {order_inquiry}\n"
             "- Reflects the sentiment (Positive, Negative, or Neutral) or intent (Return, Cancel, Status).\n"
             "- Incorporates empathy and solutions (if negative or intent-specific).\n"
-            "- If necessary, search Amazon for product details or return policies."
+            "- If necessary, search Amazon for product details."
         ),
         agent=response_agent,
         context=[sentiment_task, sentiment_review_task]
@@ -271,6 +274,7 @@ def run_agent(agent_input):
     reviewer_task = Task(
         description=(
             f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}', current date:'{current_date}'. "
+            f"Order guideline: {order_inquiry} "
             f"Represent the Amazon Customer Service Team to refine the response for the input: '{review}' with intent: '{intent}'. "
             f"Previous intent: '{last_intent or 'none'}'. "
             f"Ensure empathy, clarity, and alignment with Amazon standards. "
@@ -279,12 +283,13 @@ def run_agent(agent_input):
         expected_output=(
             "A polished empathetic response string with the following characteristics:\n"
             f"- {', '.join(common_response_guidelines)}\n"
-            f"- Follow return policy: {return_policy['policy']} and conditions: {return_policy['conditions']}\n"
+            f"you need to decide whether customer eligible for return or not by following the {return_policy['policy']} and {return_policy['conditions']} guideline \n"
             f"- Follow order inquiry guidelines: {order_inquiry}\n"
             "- Addresses sentiment and intent, within 30-50 words for intents or 30-150 words for reviews.\n"
             "- For negative sentiment, includes solutions (e.g., return instructions if within 30 days, or contact details if outside).\n"
             "- For intents, provides specific actions (e.g., return steps, cancellation info, status check).\n"
-            f"- Includes contact details if escalated: {customer_service_contact['name']}, "
+            "- For positive sentiment, invites repeat shopping with light humor.\n"
+            f"- Includes contact details if escalated or for negative sentiment: {customer_service_contact['name']}, "
             f"{customer_service_contact['email']}, {customer_service_contact['phone']}.\n"
             "- If needed, includes a link to product recommendations or solutions from Amazon or web searches."
             " Ends with a warm, positive thank-you note"
@@ -321,6 +326,67 @@ def run_agent(agent_input):
             f"for response generation: {response_agent.llm.model}, "
             f"for reviewer agent: {reviewer_agent.llm.model}"
         )
+    }
+
+    return result
+
+def process_reply(agent_input: dict, customer_reply: str, response_result: str):
+    name = agent_input.get("cust_name", "")
+    purch_date = agent_input.get("purch_date", "")
+    product = agent_input.get("product", "")
+    review = agent_input.get("review", "")
+
+    general_response_agent = Agent(
+        role="General Response Agent",
+        goal=(
+            "Your true goal is to provide any solution or suggestion to the customer. "
+            "You will need to review the response from the [reviewer agent]. "
+            "Ensure that the response is concise, clear, solution-oriented, and friendly. "
+            "You will need to respond to any customer inquiries or concerns with warm, friendly, and helpful tone."
+        ),
+        backstory=(
+            "Experienced in customer interactions, you craft meaningful responses reflecting emotions like joy or frustration. "
+            "You uphold business values through compassionate replies."
+        ),
+        llm=google_model.gemini_2_flash_lite(),
+    )
+
+    # Response task
+    general_response_task = Task(
+        description=(
+            f"Your main task is to respond to the customer reply: '{customer_reply}' after the output from the reviewer agent: '{response_result}'. "
+            f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}'. "
+            f"Represent the Amazon Customer Service Team to refine the response. "
+            f"Review the response for the input: '{response_result}'. "
+            "- dont end the conversation if the solution has not been agreed by the customer."
+        ),
+        expected_output=(
+            f"- {', '.join(common_response_guidelines)}\n"
+            f"make sure you do not repeat the same response as the '{response_result}'."
+            "- Craft the reply to be more short sentence, clear, solution-oriented, and friendly."
+            "- If needed, includes a link to product recommendations or solutions from Amazon or web searches."
+            "- respond to any customer inquiries or concerns with warm, friendly, and helpful tone."
+            "- respond to any customer inquiries or concerns with solutions or suggestions."
+            "- ensure that the response is concise, clear, solution-oriented, and friendly."
+            "- only end the conversation if the solution has been agreed by the customer."
+            "- ends with a warm, positive thank-you note."
+        ),
+        agent=general_response_agent,
+        tools=[web_search]
+    )
+
+    crew = Crew(
+        agents=[general_response_agent],
+        tasks=[general_response_task],
+        verbose=True,
+        process=Process.sequential
+    )
+
+    crew.kickoff()
+
+    result = {
+        "general_response": general_response_task.output.raw,
+        "Used_Model": f"for general response: {general_response_agent.llm.model}"
     }
 
     return result
