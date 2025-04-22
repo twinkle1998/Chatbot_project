@@ -3,7 +3,6 @@ import json
 from crewai import Task, Agent, Crew, Process
 from crewai_tools import SerperDevTool
 from models import google_model
-import re
 
 # Hardcode Serper API key
 os.environ["SERPER_API_KEY"] = "7142a72718b003f3142427769de226076a5429ff"
@@ -58,65 +57,41 @@ warnings = "Do not answer questions that involve offensive language, illegal act
 
 # Common response guidelines
 common_response_guidelines = [
-    f"keep in mind that you need to reply in the same language as the input {warnings}",
-    "Start with a friendly greeting like 'Dear [Customer's Name], '",
-    "Keep it warm, personal, and sweet, like you're chatting with a best friend",
-    "If the input is unclear, ask for more details with light humor",
-    "Offer solutions or help in a casual, enthusiastic, and approachable way.",
+    f"keep in mind that you need to reply in the same language as the user input {warnings}",
+    "Start with 'Dear [Customer's Name]' only in the initial response",
+    "Keep it warm, personal, and professional, like assisting a valued customer",
+    "If the input is unclear, ask for more details with a polite tone",
+    "Offer solutions or help in a clear, enthusiastic, and approachable way",
     "Make it easy to read: use short sentences, simple warm words, and a friendly tone",
     "use maximum 20 words per sentence",
     "use maximum 3 paragraphs",
     "Use emojis to add a warm and friendly touch where relevant",
-    "End with a positive, open note: 'Let us know if you need anything!'",
+    "End with a positive note: 'Let us know if you need anything!'",
 ]
 
-# Intent-specific responses
-intent_responses = {
-    "check_order": "Let me check your order status. Please provide your order number or confirm your recent purchase details.",
-    "cancel_order": "I can help cancel your order. Please share the order number and reason for cancellation.",
-    "talk_to_agent": "I'll connect you to an agent. Please hold, or contact us at {phone} or {email}.",
-    "return": "Sorry about the trouble! Please provide the order number and reason for the return to start the process.",
-    "replace": "Let’s get that replaced. Share the order number and details of the issue with the product.",
-    "track_order": "I’ll track your order. Please provide the order number or purchase details.",
-    "faq": "Check out our FAQs at https://www.amazon.com/gp/help/customer/display.html for quick answers, or ask me anything!"
-}
+# Session memory to track ongoing chats
+session_memory = {}
 
-def extract_name(input_text):
-    # Extract name from inputs like "My name is Abhishek" or "Abhishek"
-    match = re.search(r'(?:my name is\s+)?([a-zA-Z]+)', input_text, re.IGNORECASE)
-    return match.group(1) if match else input_text.strip()
-
-def run_agent(agent_input, session_id, conversation_history=None):
-    if conversation_history is None:
-        conversation_history = []
-
+def run_agent(agent_input, session_id):
     # Extract input data
     name = agent_input.get("cust_name", "")
-    if name:
-        name = extract_name(name)
     purch_date = agent_input.get("purch_date", "")
     product = agent_input.get("product", "")
-    review = agent_input.get("review", "")
+    user_input = agent_input.get("input", "")
 
-    # Append current input to conversation history
-    if review:
-        conversation_history.append({"role": "user", "content": review})
+    # Initialize session memory if not exists
+    if session_id not in session_memory:
+        session_memory[session_id] = {
+            "name": name,
+            "purch_date": purch_date,
+            "product": product,
+            "history": []
+        }
+
+    # Update session memory with current input
+    session_memory[session_id]["history"].append({"user": user_input})
 
     # Defining Agents
-    intent_agent = Agent(
-        role="Intent Detection Agent",
-        goal=(
-            "Identify the user’s intent from the input text, such as checking orders, canceling orders, returns, or FAQs. "
-            "Classify the intent accurately to guide the response."
-        ),
-        backstory=(
-            "Skilled in understanding user queries, you excel at detecting intents from diverse customer inputs. "
-            "You ensure responses align with the user’s needs."
-        ),
-        llm=google_model.gemini_2_flash_lite(),
-        verbose=False
-    )
-
     sentiment_agent = Agent(
         role="Sentiment Analysis Agent",
         goal=(
@@ -135,7 +110,7 @@ def run_agent(agent_input, session_id, conversation_history=None):
     sentiment_review_agent = Agent(
         role="Sentiment Review Agent",
         goal=(
-            f"Review the sentiment and emotion analysis for the input: '{review}'. "
+            f"Review the sentiment and emotion analysis for the input: '{user_input}'. "
             "Ensure sentiment analysis is precise and contextually appropriate. "
             "Confirm sentiment as Positive, Negative, or Neutral. "
             "Capture the dominant emotion for response relevance."
@@ -152,9 +127,9 @@ def run_agent(agent_input, session_id, conversation_history=None):
     response_agent = Agent(
         role="Response Generation Agent",
         goal=(
-            "Generate tailored responses based on detected intent, sentiment, and conversation history. "
-            "Ensure empathetic, helpful replies in the same language as the input. "
-            "Address concerns appropriately, offering solutions for negative feedback. "
+            "Generate tailored responses for customer inputs based on sentiment and context. "
+            "Handle customer service queries like order tracking, cancellation, returns, replacements, and FAQs. "
+            "Use session history to maintain context within the same chat. "
             "Strengthen customer trust and satisfaction."
         ),
         backstory=(
@@ -168,8 +143,9 @@ def run_agent(agent_input, session_id, conversation_history=None):
     reviewer_agent = Agent(
         role="Response Reviewer Agent",
         goal=(
-            "Review and refine responses for empathy, politeness, and conciseness. "
-            "Ensure responses align with Amazon standards and address user intent. "
+            "Generate final tailored responses for customer inputs based on sentiment and context. "
+            "Review and adjust responses for empathy, politeness, and conciseness. "
+            "Ensure responses address concerns with effective solutions. "
             "Deliver polished replies within 200-350 words."
         ),
         backstory=(
@@ -182,21 +158,9 @@ def run_agent(agent_input, session_id, conversation_history=None):
     )
 
     # Defining Tasks
-    intent_task = Task(
-        description=(
-            f"Analyze the input text: '{review}'. "
-            "Identify the user’s intent (e.g., check order, cancel order, return, replace, track order, talk to agent, faq, or feedback). "
-            "Return the detected intent."
-        ),
-        expected_output=json.dumps({
-            "intent": "e.g., check_order, cancel_order, talk_to_agent, return, replace, track_order, faq, feedback"
-        }, indent=2),
-        agent=intent_agent
-    )
-
     sentiment_task = Task(
         description=(
-            f"Analyze the sentiment of the text: '{review}'. "
+            f"Analyze the sentiment of the text: '{user_input}'. "
             "Classify as Positive, Negative, or Neutral. "
             "Identify the dominant emotion expressed."
         ),
@@ -224,15 +188,15 @@ def run_agent(agent_input, session_id, conversation_history=None):
 
     response_task = Task(
         description=(
-            f"Customer information: name:'{name}', purchase_date:'{purch_date}', product:'{product}'. "
-            f"Conversation history: {json.dumps(conversation_history, indent=2)}. "
-            f"Generate a tailored response for the input: '{review}'. "
-            "Follow intent-specific guidelines:\n"
-            f"- Intent detected: {{intent_task.output}}. "
-            f"- For feedback, use sentiment-specific guidelines:\n"
-            f"  - Positive: {', '.join(positive_considerations)}\n"
-            f"  - Negative: {', '.join(negative_considerations)}\n"
-            f"  - Neutral: {', '.join(neutral_considerations)}\n"
+            f"Customer information: name:'{name}', product:'{product}', purchase date:'{purch_date}'. "
+            f"Current input: '{user_input}'. "
+            f"Session history: {json.dumps(session_memory[session_id]['history'], indent=2)}. "
+            "Generate a tailored response based on the input and sentiment. "
+            "Handle queries like order tracking, cancellation, returns, replacements, and FAQs. "
+            "Follow sentiment-specific guidelines:\n"
+            f"- Positive: {', '.join(positive_considerations)}\n"
+            f"- Negative: {', '.join(negative_considerations)}\n"
+            f"- Neutral: {', '.join(neutral_considerations)}\n"
             f"Expectations:\n"
             f"- Positive: {', '.join(positive_expectations)}\n"
             f"- Negative: {', '.join(negative_expectations)}\n"
@@ -241,27 +205,26 @@ def run_agent(agent_input, session_id, conversation_history=None):
         expected_output=(
             "A response string with the following characteristics:\n"
             f"- {', '.join(common_response_guidelines)}\n"
-            "- Reflects the detected intent and sentiment.\n"
-            "- Incorporates conversation history for context.\n"
-            "- For non-feedback intents, use predefined responses: {json.dumps(intent_responses, indent=2)}.\n"
-            "- If necessary, search Amazon for product or order details."
+            "- Reflects the sentiment (Positive, Negative, or Neutral).\n"
+            "- Incorporates empathy and solutions (if negative).\n"
+            "- Uses session history to maintain context.\n"
+            "- If necessary, search Amazon for relevant details."
         ),
         agent=response_agent,
-        context=[intent_task, sentiment_task, sentiment_review_task]
+        context=[sentiment_task, sentiment_review_task]
     )
 
     reviewer_task = Task(
         description=(
-            f"Customer information: name:'{name}', purchase_date:'{purch_date}', product:'{product}'. "
-            f"Conversation history: {json.dumps(conversation_history, indent=2)}. "
+            f"Customer information: name:'{name}', product:'{product}', purchase date:'{purch_date}'. "
+            f"Current input: '{user_input}'. "
             "Represent the Amazon Customer Service Team to refine the response. "
-            f"Review the response for the input: '{review}'. "
             "Ensure empathy, clarity, and alignment with Amazon standards."
         ),
         expected_output=(
             "A polished empathetic response string with the following characteristics:\n"
             f"- {', '.join(common_response_guidelines)}\n"
-            "- Addresses intent, sentiment, and emotion, within 30-50 words.\n"
+            "- Addresses sentiment and emotion, within 30-50 words.\n"
             "- For negative sentiment, includes solutions (e.g., new product for faulty items, delivery review for delays).\n"
             "- For positive sentiment, invites repeat shopping with light humor.\n"
             f"- Includes contact details: {customer_service_contact['name']}, "
@@ -270,37 +233,35 @@ def run_agent(agent_input, session_id, conversation_history=None):
             " Ends with a warm, positive thank-you note"
         ),
         agent=reviewer_agent,
-        context=[intent_task, sentiment_task, sentiment_review_task, response_task],
+        context=[sentiment_task, sentiment_review_task, response_task],
         tools=[web_search]
     )
 
     # Crew Setup and Execution
     crew = Crew(
-        agents=[intent_agent, sentiment_agent, sentiment_review_agent, response_agent, reviewer_agent],
-        tasks=[intent_task, sentiment_task, sentiment_review_task, response_task, reviewer_task],
+        agents=[sentiment_agent, sentiment_review_agent, response_agent, reviewer_agent],
+        tasks=[sentiment_task, sentiment_review_task, response_task, reviewer_task],
         verbose=True,
         process=Process.sequential
     )
 
     crew.kickoff()
 
-    # Update conversation history with bot response
-    conversation_history.append({"role": "bot", "content": reviewer_task.output.raw})
+    # Store bot response in session memory
+    bot_response = reviewer_task.output.raw
+    session_memory[session_id]["history"].append({"bot": bot_response})
 
     # Output results
     result = {
         "name": name,
         "purchase_date": purch_date,
         "product": product,
-        "review": review,
-        "intent": intent_task.output.raw,
+        "input": user_input,
         "sentiment": sentiment_task.output.raw,
         "sentiment_review": sentiment_review_task.output.raw,
         "response": response_task.output.raw,
-        "reviewed_response": reviewer_task.output.raw,
-        "conversation_history": conversation_history,
+        "reviewed_response": bot_response,
         "Used_Model": (
-            f"for intent detection: {intent_agent.llm.model}, "
             f"for sentiment analysis: {sentiment_agent.llm.model}, "
             f"for sentiment review: {sentiment_review_agent.llm.model}, "
             f"for response generation: {response_agent.llm.model}, "
@@ -309,3 +270,7 @@ def run_agent(agent_input, session_id, conversation_history=None):
     }
 
     return result
+
+def end_session(session_id):
+    if session_id in session_memory:
+        del session_memory[session_id]
