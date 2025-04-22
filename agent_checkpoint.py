@@ -117,7 +117,7 @@ def run_agent(agent_input):
     name = agent_input.get("cust_name", "")
     purch_date = agent_input.get("purch_date", "")
     product = agent_input.get("product", "")
-    review = agent_input.get("review", "")
+    review = agent_input.get("input", "")  # Changed 'review' to 'input' to match frontend
 
     sentiment_agent = Agent(
         role="Sentiment Analysis Agent",
@@ -137,7 +137,7 @@ def run_agent(agent_input):
     sentiment_review_agent = Agent(
         role="Sentiment Review Agent",
         goal=(
-            f"Review the sentiment and emotion analysis from the review: '{review}'. "
+            f"Review the sentiment and emotion analysis from the input: '{review}'. "
             "Ensure sentiment analysis is precise and contextually appropriate. "
             "Confirm sentiment as Positive, Negative, or Neutral. "
             "Capture the dominant emotion for response relevance."
@@ -154,7 +154,7 @@ def run_agent(agent_input):
     response_agent = Agent(
         role="Response Generation Agent",
         goal=(
-            "Generate tailored responses for customer reviews based on sentiment and the same language as the review. "
+            "Generate tailored responses for customer inputs based on sentiment and the same language as the input. "
             "Generate empathetic, helpful responses based on sentiment and emotion analysis. "
             "Address concerns appropriately, offering solutions for negative feedback. "
             "Strengthen customer trust and satisfaction."
@@ -170,7 +170,7 @@ def run_agent(agent_input):
     reviewer_agent = Agent(
         role="Response Reviewer Agent",
         goal=(
-            "Generate final tailored responses for customer reviews based on sentiment and the same language as the review. "
+            "Generate final tailored responses for customer inputs based on sentiment and the same language as the input. "
             "Review and adjust responses for empathy, politeness, and conciseness. "
             "Ensure responses address concerns with effective solutions. "
             "Deliver polished replies within 200-350 words."
@@ -217,9 +217,9 @@ def run_agent(agent_input):
     response_task = Task(
         description=(
             f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}'. "
-            f" current date: {current_date} "
+            f"current date: {current_date} "
             f"Order guideline: {order_inquiry} "
-            f"Generate a tailored response for the review: '{review}'. "
+            f"Generate a tailored response for the input: '{review}'. "
             "Follow sentiment-specific guidelines:\n"
             f"- Positive: {', '.join(positive_considerations)}\n"
             f"- Negative: {', '.join(negative_considerations)}\n"
@@ -244,7 +244,7 @@ def run_agent(agent_input):
     reviewer_task = Task(
         description=(
             f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}'. "
-            f" current date: {current_date} "
+            f"current date: {current_date} "
             f"Order guideline: {order_inquiry} "
             "Represent the Amazon Customer Service Team to refine the response. "
             f"Review the response for the input: '{review}'. "
@@ -258,7 +258,7 @@ def run_agent(agent_input):
             "- For negative sentiment, includes solutions (e.g., new product for faulty items, delivery review for delays).\n"
             "- For positive sentiment, invites repeat shopping with light humor.\n"
             f"- Includes contact details: {customer_service_contact['name']} if the customer needs further assistance or related to negative sentiment.\n"
-            f" {customer_service_contact['email']}, {customer_service_contact['phone']}.\n"
+            f"{customer_service_contact['email']}, {customer_service_contact['phone']}.\n"
             "- If needed, includes a link to product recommendations or solutions from Amazon or web searches."
             " Ends with a warm, positive thank-you note"
         ),
@@ -301,7 +301,7 @@ def process_reply(agent_input: dict, customer_reply: str, response_result: str):
     name = agent_input.get("cust_name", "")
     purch_date = agent_input.get("purch_date", "")
     product = agent_input.get("product", "")
-    review = agent_input.get("review", "")
+    review = agent_input.get("input", "")  # Changed 'review' to 'input' to match frontend
 
     general_response_agent = Agent(
         role="General Response Agent",
@@ -357,3 +357,19 @@ def process_reply(agent_input: dict, customer_reply: str, response_result: str):
     }
 
     return result
+
+def end_session(session_id: str):
+    """
+    Mark a session as ended and return confirmation.
+    
+    Args:
+        session_id (str): The ID of the session to end.
+    
+    Returns:
+        dict: Confirmation of session termination.
+    """
+    return {
+        "session_id": session_id,
+        "status": "ended",
+        "message": "Session has been successfully terminated."
+    }
