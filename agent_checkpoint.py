@@ -1,12 +1,13 @@
 import os
 import json
+import datetime as dt
 from datetime import datetime
 from dateutil.parser import parse
 from crewai import Task, Agent, Crew, Process
 from crewai_tools import SerperDevTool
 from models import google_model
 
-# Hardcode Serper API key
+# Hardcode Serper API key for deployment
 os.environ["SERPER_API_KEY"] = "7142a72718b003f3142427769de226076a5429ff"
 
 # Assign serper tool to a variable
@@ -18,7 +19,7 @@ customer_service_contact = {
     "email": "customerservice@amazon.com",
     "phone": "+1-800-123-4567",
     "address": "123 Amazon Way, Seattle, WA 98101",
-} 
+}
 
 # Sentiment considerations
 positive_considerations = [
@@ -61,36 +62,61 @@ status_considerations = [
 
 # Sentiment-specific expectations
 positive_expectations = [
-    "A cheerful, empathetic response under 500 words with five paragraphs."
+    "A cheerful, empathetic response under 100 words"
 ]
 
 negative_expectations = [
-    "A polite, solution-oriented response under 500 words with five paragraphs."
+    "A polite, solution-oriented response under 150 words"
 ]
 
 neutral_expectations = [
-    "A friendly, engaging response under 500 words with five paragraphs."
+    "A friendly, engaging response under 100 words"
 ]
 
 intent_expectations = [
     "A concise, action-oriented response under 100 words, addressing the specific intent."
 ]
 
-warnings = "Do not answer questions that involve offensive language, illegal activities, sensitive information, manipulative intent, or are vague and nonsensical, and politely reject, ask for clarification, or redirect as needed."
-
 # Common response guidelines
 common_response_guidelines = [
-    f"keep in mind that you need to reply in the same language as the review {warnings}",
-    "Start with a friendly greeting like 'Hey [Customer's Name]!' or '[Customer's Name]!'",
+    "Never say i cannot help you or i am not able to help you",
+    "keep in mind that you need to reply in the same language as the review",
+    "Do not answer questions that involve offensive language, illegal activities, sensitive information, manipulative intent, or are vague and nonsensical, and politely reject, ask for clarification, or redirect as needed.",
     "Keep it warm, personal, and sweet, like you're chatting with a best friend",
     "If the review is unclear, ask for more details with light humor",
     "Offer solutions or help in a casual, enthusiastic, and approachable way.",
     "Make it easy to read: use short sentences, simple warm words, and a friendly tone",
-    "use maximum 20 words per sentence",
+    "Is is mandatory to make your response easy to read: use short sentences, clear separation between paragraphs, and a friendly tone",
+    "use maximum 25 words per sentence",
     "use maximum 3 paragraphs",
     "Use emojis to add a warm and friendly touch where relevant",
     "End with a positive, open note: 'Let us know if you need anything!'",
 ]
+
+# Return policy
+return_policy = {
+    "policy": [
+        "customer can return the product within 30 days of purchase for a full refund.",
+        "customer cannot return the product after 30 days of purchase."
+    ],
+    "conditions": [
+        "The product must be in its original condition and packaging.",
+        "customer must provide proof of purchase, such as a receipt or order confirmation.",
+        "Certain items, such as electronics or personalized products, may have different return policies.",
+        "If the product is defective or damaged, you may be eligible for a replacement or repair.",
+        "For more information, please visit our return policy page on the Amazon website."
+    ]
+}
+
+# Order inquiry guidelines
+order_inquiry = [
+    "If the customer ask about their order status, follow up with order status inquiry or politely ask them to contact customer service for assistance.",
+    "If the customer ask to cancel their order, follow up with order cancellation inquiry or politely ask them to contact customer service for assistance.",
+    "If the customer ask to talk to agent or customer service, follow up with giving them the customer service contact information."
+]
+
+# Get current date
+current_date = dt.datetime.now().strftime("%Y-%m-%d")
 
 def validate_purchase_date(purch_date):
     try:
@@ -143,7 +169,7 @@ def run_agent(agent_input):
         ),
         llm=google_model.gemini_2_flash(),
         verbose=True,
-        max_iterations=10
+        max_iterations=2
     )
 
     response_agent = Agent(
@@ -159,7 +185,7 @@ def run_agent(agent_input):
             "You uphold business values through compassionate replies."
         ),
         llm=google_model.gemini_2_flash_lite(),
-        max_iterations=25
+        max_iterations=2
     )
 
     reviewer_agent = Agent(
@@ -168,7 +194,7 @@ def run_agent(agent_input):
             "Generate final tailored responses for customer reviews or intents based on sentiment and the same language as the input. "
             "Review and adjust responses for empathy, politeness, and conciseness. "
             "Ensure responses address concerns with effective solutions, considering intent and context. "
-            "Deliver polished replies within 200-350 words for reviews or 30-100 words for specific intents."
+            "Deliver polished replies within 30-50 words for intents or 30-150 words for reviews."
         ),
         backstory=(
             "Your expertise in evaluating customer communications ensures every response meets high standards of empathy and clarity. "
@@ -176,7 +202,8 @@ def run_agent(agent_input):
         ),
         llm=google_model.gemini_2_flash(),
         verbose=True,
-        tools=[web_search]
+        tools=[web_search],
+        max_iterations=2
     )
 
     # Defining Tasks
@@ -210,7 +237,7 @@ def run_agent(agent_input):
 
     response_task = Task(
         description=(
-            f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}'. "
+            f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}', current date:'{current_date}'. "
             f"Generate a tailored response for the input: '{review}' with intent: '{intent}'. "
             f"Previous intent: '{last_intent or 'none'}'. "
             f"Follow guidelines based on sentiment or intent:\n"
@@ -231,6 +258,8 @@ def run_agent(agent_input):
         expected_output=(
             "A response string with the following characteristics:\n"
             f"- {', '.join(common_response_guidelines)}\n"
+            f"- Follow return policy: {return_policy['policy']} and conditions: {return_policy['conditions']}\n"
+            f"- Follow order inquiry guidelines: {order_inquiry}\n"
             "- Reflects the sentiment (Positive, Negative, or Neutral) or intent (Return, Cancel, Status).\n"
             "- Incorporates empathy and solutions (if negative or intent-specific).\n"
             "- If necessary, search Amazon for product details or return policies."
@@ -241,7 +270,7 @@ def run_agent(agent_input):
 
     reviewer_task = Task(
         description=(
-            f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}'. "
+            f"Customer information provided: name:'{name}', product:'{product}', purchasedate:'{purch_date}', current date:'{current_date}'. "
             f"Represent the Amazon Customer Service Team to refine the response for the input: '{review}' with intent: '{intent}'. "
             f"Previous intent: '{last_intent or 'none'}'. "
             f"Ensure empathy, clarity, and alignment with Amazon standards. "
@@ -250,7 +279,9 @@ def run_agent(agent_input):
         expected_output=(
             "A polished empathetic response string with the following characteristics:\n"
             f"- {', '.join(common_response_guidelines)}\n"
-            "- Addresses sentiment and intent, within 30-100 words for intents or 200-350 words for reviews.\n"
+            f"- Follow return policy: {return_policy['policy']} and conditions: {return_policy['conditions']}\n"
+            f"- Follow order inquiry guidelines: {order_inquiry}\n"
+            "- Addresses sentiment and intent, within 30-50 words for intents or 30-150 words for reviews.\n"
             "- For negative sentiment, includes solutions (e.g., return instructions if within 30 days, or contact details if outside).\n"
             "- For intents, provides specific actions (e.g., return steps, cancellation info, status check).\n"
             f"- Includes contact details if escalated: {customer_service_contact['name']}, "
@@ -293,3 +324,8 @@ def run_agent(agent_input):
     }
 
     return result
+
+def end_session(session_id: str):
+    # Placeholder for session termination logic
+    # Since sessions are managed client-side in localStorage, return success
+    return {"status": "success", "message": f"Session {session_id} terminated."}
