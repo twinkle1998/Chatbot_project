@@ -37,6 +37,7 @@
       position: fixed;
       top: 0;
       width: 100%;
+      height: 0.1%;
       background: linear-gradient(rgba(31, 33, 41, 0.9) -34%, rgba(26, 28, 35, 0.9) 100%);
       backdrop-filter: blur(10px);
       padding: 20px 60px;
@@ -105,14 +106,13 @@
       top: 100px;
       left: 50%;
       transform: translateX(-50%);
-      width: 200%;
-      max-width: 1200px;
+      width: 100%;
+      max-width: 1250px;
       height: calc(100vh - 120px);
       padding: 20px;
       z-index: 0;
       font-family: 'Poppins', 'Segoe UI', sans-serif;
       color: #FFFFFF;
-      overflow-y: auto;
     }
     .website-content::-webkit-scrollbar {
       width: 8px;
@@ -841,28 +841,46 @@
     .navbar div svg path {
       fill: #999999;
     }
-    .message-icon {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 56px;
-      height: 56px;
-      background-color: rgb(243, 156, 24);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      animation: popUp 0.5s ease-out forwards;
-      transition: transform 0.3s ease-in-out;
-    }
-    .message-icon::before {
-      content: '\1F4AC';
-      font-size: 24px;
-      color: #FFFFFF;
-    }
+       .message-icon {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  width: 130px;
+  height: 50px;
+  background-color: rgb(243, 156, 24);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: popUp 0.5s ease-out forwards;
+  transition: transform 0.3s ease-in-out;
+  gap: 8px;
+}
+
+.message-icon .icon-circle {
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #FFFFFF;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+
+.message-icon span {
+  font-size: 20px;
+  color: #FFFFFF;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
     @keyframes popUp {
       0% {
         transform: scale(0);
@@ -1350,7 +1368,9 @@
       </div>
     </div>
   </div>
-  <div class="message-icon" onclick="toggleChat()"></div>
+  <div class="message-icon" onclick="toggleChat()">
+        <div class="icon-circle">?</div>
+        <span>Help</span>
 
   <script>
     let name = "";
