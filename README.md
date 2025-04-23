@@ -13,6 +13,10 @@ Developed for the **Master of Data Science and Innovation** program at the **Uni
 git clone https://github.com/<your-username>/amazon-chatbot.git
 cd amazon-chatbot
 
+```bash
+
 📦 Install dependencies
+
+```bash
 
 pip install -r requirements.txt
