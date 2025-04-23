@@ -574,7 +574,7 @@
       background-color: #FFFFFF;
       scroll-behavior: smooth;
       min-height: 0;
-      height: 0;
+      height: auto;
     }
     .messages-body::-webkit-scrollbar {
       width: 6px;
@@ -707,6 +707,10 @@
       bottom: 0;
       z-index: 1;
       flex-shrink: 0;
+      transition: transform 0.3s ease-in-out;
+    }
+    .messages-footer.active {
+      transform: translateY(-10px);
     }
     .input-container {
       display: flex;
@@ -734,6 +738,12 @@
     .input-row input:disabled {
       background-color: #E5E5E5;
       cursor: not-allowed;
+    }
+    .input-row input:focus {
+      outline: none;
+    }
+    .input-row input:focus + .send-btn {
+      color: darkgrey;
     }
     .send-btn, .mic-btn {
       width: 30px;
@@ -1123,7 +1133,7 @@
         </div>
         <div class="team-card">
           <h3>Iqbal Muhammad</h3>
-          <p>Executing the dataset integration, conducting a thorough investigation of potential approaches for employing multi agent frame work and opprtunities to leverage API. Developing, testing, and fine-tuning the multi-agent system. Benchmarking local LLM and Gemini's responses, responsible for challenges and recommendations section in the project. </p>
+          <p>Executing the dataset integration, conducting a thorough investigation of potential approaches for employing multi agent frame work and opprtunities to leverage API. Developing, testing, and fine-tuning the multi-agent system. Benchmarking local LLM and Gemini's responses, responsible for challenges and recommendations section in the project.</p>
         </div>
         <div class="team-card">
           <h3>Ratana Sovann</h3>
@@ -1136,394 +1146,413 @@
       </div>
     </div>
     <div id="eda" class="tab-content">
-        <h1>Exploratory Data Analysis (EDA)</h1>
-        <h2>Data Source</h2>
-        <p>We utilized the Amazon US Customer Reviews Dataset from Kaggle, containing 449,172 records across 148 product categories. We sampled 2,000 reviews per rating (1–5 stars) to ensure diversity.</p>
-        <h2>Data Structure</h2>
-        <p>The dataset includes fields like review_headline, review_body, star_rating, and product_category. We examined data dimensions, handled missing values, and removed duplicates.</p>
-        <h2>Key Insights</h2>
-        <p>Sentiment tagging was performed based on star ratings: 1–2 stars (negative), 3 stars (neutral), 4–5 stars (positive). Visualizations showed a majority of positive reviews, with word clouds highlighting terms like "great" in positive reviews and "delay" in negative ones.</p>
-      </div>
-      <div id="pre-processing" class="tab-content">
-        <h1>Pre Processing of Data</h1>
-        <h2>Text Cleaning</h2>
-        <p>We cleaned review text by removing HTML tags, non-alphabetic characters, and stopwords, and expanded contractions for consistency.</p>
-        <h2>Normalization</h2>
-        <p>Converted text to lowercase and standardized formats to prepare for NLP tasks.</p>
-        <h2>Preparation for Modelling</h2>
-        <p>Performed tokenization and lemmatization to reduce words to their base forms, ensuring efficient input for sentiment analysis.</p>
-      </div>
-      <div id="data-cleaning" class="tab-content">
-        <h1>Data Cleaning by NLP Techniques</h1>
-        <h2>Noise Removal</h2>
-        <p>Applied NLP techniques to remove noise such as emojis, punctuation, and irrelevant characters from the reviews.</p>
-        <h2>Sentiment Tagging</h2>
-        <p>Tagged sentiments based on star ratings and preserved negations to maintain context.</p>
-        <h2>Lexical Patterns</h2>
-        <p>Used word clouds to identify lexical patterns, such as frequent terms in positive and negative reviews.</p>
-      </div>
-      <div id="modelling" class="tab-content">
-        <h1>Modelling</h1>
-        <h2>Multi-Agent Framework</h2>
-        <p>Adopted CrewAI’s four-stage pipeline: Sentiment Analysis Agent (Gemini 2.0 Flash-Lite), Sentiment Review Agent (Gemini 2.0 Flash), Response Generation Agent, and Polishing Agent for compliance checks.</p>
-        <h2>Prompt Engineering</h2>
-        <p>Designed hierarchical prompt templates with dynamic variable injection, achieving a 37% increase in response relevance. Templates ensured compliance and appropriate tone.</p>
-        <h2>Key Findings</h2>
-        <p>Gemini 2.0 Flash excelled in positive scenarios (4.7/5 score) but struggled with long texts (>300 words, 21% accuracy drop). Two-stage sentiment analysis identified 82% of contradictory semantics.</p>
-      </div>
-      <div id="deployment" class="tab-content">
-        <h1>Deployment</h1>
-        <h2>Backend Integration</h2>
-        <p>Deployed using FastAPI, Uvicorn, and Docker on Render, ensuring scalable access and seamless API integration.</p>
-        <h2>Frontend Design</h2>
-        <p>Developed a clean, cheerful UI with React (now updated to pure HTML/CSS/JS for simplicity), focusing on an engaging chat experience.</p>
-        <h2>User Interaction</h2>
-        <p>Users interact via a chat interface, inputting their name, purchase date, product, and issue. The system supports speech-to-text and multilingual compatibility.</p>
-      </div>
-      <div id="challenges" class="tab-content">
-        <h1>Challenges Faced</h1>
-        <h2>Dataset Size</h2>
-        <p>The Amazon dataset (54 GB, 57 CSV files) was challenging to process. We adopted a partial-import strategy, sampling 2,000 rows per rating to maintain proportionality.</p>
-        <h2>Model Selection</h2>
-        <p>Fine-tuning pretrained models was resource-intensive. We switched to CrewAI’s agent framework, using Gemini 2.0 Flash for better performance.</p>
-        <h2>Agent Configuration</h2>
-        <p>Determined an optimal four-agent structure (Sentiment, Sentiment Review, Response, Reviewer) after multiple trials to balance complexity and performance.</p>
-      </div>
+      <h1>Exploratory Data Analysis (EDA)</h1>
+      <h2>Data Source</h2>
+      <p>We utilized the Amazon US Customer Reviews Dataset from Kaggle, containing 449,172 records across 148 product categories. We sampled 2,000 reviews per rating (1–5 stars) to ensure diversity.</p>
+      <h2>Data Structure</h2>
+      <p>The dataset includes fields like review_headline, review_body, star_rating, and product_category. We examined data dimensions, handled missing values, and removed duplicates.</p>
+      <h2>Key Insights</h2>
+      <p>Sentiment tagging was performed based on star ratings: 1–2 stars (negative), 3 stars (neutral), 4–5 stars (positive). Visualizations showed a majority of positive reviews, with word clouds highlighting terms like "great" in positive reviews and "delay" in negative ones.</p>
     </div>
-    <div id="chat-widget" class="chat-widget">
-      <div class="tab-section home-section active" id="home-section">
-        <div class="home-header">
-          <svg class="logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="rgb(243, 156, 24)"></path>
-          </svg>
-          <h1>Hey there, how can we help?</h1>
-        </div>
-        <div class="home-body">
-          <div class="home-main" id="home-main">
-            <div class="chat-container">
-              <div class="start-new-chat-label">Start New Chat</div>
-              <div class="new-chat-option" id="new-chat-option" onclick="startNewChat()">
-                <span>Share Your Feedback or Report an Issue</span>
-                <span class="arrow">></span>
-              </div>
-            </div>
-            <input type="text" class="search-bar" id="search-bar" placeholder="Search for help">
-            <div class="search-result" id="search-result">
-              <div class="search-result-header">
-                <h2>Search Result</h2>
-                <div class="clear-search" onclick="clearSearch()">Clear Search</div>
-              </div>
-              <div class="search-result-content" id="search-result-content">
-                <div class="home-item" onclick="sendSuggestion('Check Order Status')">
-                  Check Order Status <span class="arrow">></span>
-                </div>
-                <div class="home-item" onclick="sendSuggestion('Track Order')">
-                  Track Order <span class="arrow">></span>
-                </div>
-                <div class="home-item" onclick="sendSuggestion('Cancel Order')">
-                  Cancel Order <span class="arrow">></span>
-                </div>
-                <div class="home-item" onclick="sendSuggestion('Talk to an Agent')">
-                  Talk to an Agent <span class="arrow">></span>
-                </div>
-              </div>
-            </div>
-            <div class="faq-section">
-              <h3>FAQs</h3>
-              <div class="faq-item" onclick="showDetail('how-to-use')">
-                How to Use This Chatbot <span class="arrow">></span>
-              </div>
-              <div class="faq-item" onclick="showDetail('chat-ends')">
-                When Chat Ends, Go to Home Page and Start New <span class="arrow">></span>
-              </div>
-              <div class="faq-item" onclick="showDetail('recent-chats-24')">
-                Recent Chats Will Be Available Forever <span class="arrow">></span>
-              </div>
-              <div class="faq-item" onclick="showDetail('ethical-content')">
-                Ethical Content Guidelines for Server Response <span class="arrow">></span>
-              </div>
-            </div>
-          </div>
-          <div class="home-detail" id="detail-how-to-use">
-            <div class="home-detail-header">
-              <div class="back-arrow" onclick="hideDetail()"><</div>
-              <h2>How to Use This Chatbot</h2>
-            </div>
-            <div class="home-detail-content">
-              <p>The Amazon Chatbot is designed to assist you with your shopping needs in a simple and intuitive way. To get started, click the message icon at the bottom-right corner of the screen to open the chat widget.</p>
-              <p>From the "Home" tab, select "Share Your Feedback or Report an Issue" to begin a new conversation, or explore helpful articles by clicking on options like "What is This Chatbot For?" or "Getting Started with Amazon Chatbot."</p>
-              <p>In the "Messages" tab, the chatbot will guide you step-by-step—first asking for your name, then the purchase date, the product, and finally your feedback or issue.</p>
-              <p>You can also use the search bar on the "Home" tab to quickly find help on specific topics, or use the microphone button to send voice messages for a hands-free experience.</p>
-              <iframe src="https://drive.google.com/file/d/1y3nhbOf3fTLT04r0iBgw9ee9zArB33Gs/preview" allow="autoplay" allowfullscreen></iframe>
-            </div>
-          </div>
-          <div class="home-detail" id="detail-chat-ends">
-            <div class="home-detail-header">
-              <div class="back-arrow" onclick="hideDetail()"><</div>
-              <h2>When Chat Ends, Go to Home Page and Start New</h2>
-            </div>
-            <div class="home-detail-content">
-              <p>Once your conversation with the Amazon Chatbot concludes, you’ll be automatically directed back to the "Home" tab to ensure a seamless experience. This reset allows you to easily start a fresh chat without lingering on previous conversations.</p>
-              <p>To begin a new chat, simply click "Share Your Feedback or Report an Issue" again, and the chatbot will restart the process by asking for your name, purchase date, product, and feedback.</p>
-              <p>This feature ensures that each interaction is independent, keeping your experience organized and focused on your current needs.</p>
-            </div>
-          </div>
-          <div class="home-detail" id="detail-recent-chats-24">
-            <div class="home-detail-header">
-              <div class="back-arrow" onclick="hideDetail()"><</div>
-              <h2>Recent Chats Will Be Available Forever</h2>
-            </div>
-            <div class="home-detail-content">
-              <p>Your recent conversations with the Amazon Chatbot are conveniently displayed under the "Recent Chats" section on the "Home" tab, allowing you to revisit them if needed.</p>
-              <p>These chats are now stored indefinitely in local storage, so you can access them anytime without worrying about expiration.</p>
-              <p>If you wish to continue a conversation, simply click on it to reopen it, or start a new chat by selecting "Share Your Feedback or Report an Issue."</p>
-            </div>
-          </div>
-          <div class="home-detail" id="detail-ethical-content">
-            <div class="home-detail-header">
-              <div class="back-arrow" onclick="hideDetail()"><</div>
-              <h2>Ethical Content Guidelines for Server Response</h2>
-            </div>
-            <div class="home-detail-content">
-              <p>The Amazon Chatbot is committed to fostering a respectful and supportive environment, and as such, the server will only respond to messages that adhere to ethical content guidelines.</p>
-              <p>Please use polite and appropriate language when interacting with the chatbot, avoiding any offensive, discriminatory, or harmful content. For example, instead of saying, "This product is trash," try, "I’m not satisfied with this product because of its quality."</p>
-              <p>If your message contains inappropriate language, the server may not respond, and you’ll receive a message like, "Sorry, there was an error reaching the server. Please try again later." Let’s keep the conversation friendly and constructive to ensure the best experience for everyone.</p>
-            </div>
-          </div>
-        </div>
+    <div id="pre-processing" class="tab-content">
+      <h1>Pre Processing of Data</h1>
+      <h2>Text Cleaning</h2>
+      <p>We cleaned review text by removing HTML tags, non-alphabetic characters, and stopwords, and expanded contractions for consistency.</p>
+      <h2>Normalization</h2>
+      <p>Converted text to lowercase and standardized formats to prepare for NLP tasks.</p>
+      <h2>Preparation for Modelling</h2>
+      <p>Performed tokenization and lemmatization to reduce words to their base forms, ensuring efficient input for sentiment analysis.</p>
+    </div>
+    <div id="data-cleaning" class="tab-content">
+      <h1>Data Cleaning by NLP Techniques</h1>
+      <h2>Noise Removal</h2>
+      <p>Applied NLP techniques to remove noise such as emojis, punctuation, and irrelevant characters from the reviews.</p>
+      <h2>Sentiment Tagging</h2>
+      <p>Tagged sentiments based on star ratings and preserved negations to maintain context.</p>
+      <h2>Lexical Patterns</h2>
+      <p>Used word clouds to identify lexical patterns, such as frequent terms in positive and negative reviews.</p>
+    </div>
+    <div id="modelling" class="tab-content">
+      <h1>Modelling</h1>
+      <h2>Multi-Agent Framework</h2>
+      <p>Adopted CrewAI’s four-stage pipeline: Sentiment Analysis Agent (Gemini 2.0 Flash-Lite), Sentiment Review Agent (Gemini 2.0 Flash), Response Generation Agent, and Polishing Agent for compliance checks.</p>
+      <h2>Prompt Engineering</h2>
+      <p>Designed hierarchical prompt templates with dynamic variable injection, achieving a 37% increase in response relevance. Templates ensured compliance and appropriate tone.</p>
+      <h2>Key Findings</h2>
+      <p>Gemini 2.0 Flash excelled in positive scenarios (4.7/5 score) but struggled with long texts (>300 words, 21% accuracy drop). Two-stage sentiment analysis identified 82% of contradictory semantics.</p>
+    </div>
+    <div id="deployment" class="tab-content">
+      <h1>Deployment</h1>
+      <h2>Backend Integration</h2>
+      <p>Deployed using FastAPI, Uvicorn, and Docker on Render, ensuring scalable access and seamless API integration.</p>
+      <h2>Frontend Design</h2>
+      <p>Developed a clean, cheerful UI with React (now updated to pure HTML/CSS/JS for simplicity), focusing on an engaging chat experience.</p>
+      <h2>User Interaction</h2>
+      <p>Users interact via a chat interface, inputting their name, purchase date, product, and issue. The system supports speech-to-text and multilingual compatibility.</p>
+    </div>
+    <div id="challenges" class="tab-content">
+      <h1>Challenges Faced</h1>
+      <h2>Dataset Size</h2>
+      <p>The Amazon dataset (54 GB, 57 CSV files) was challenging to process. We adopted a partial-import strategy, sampling 2,000 rows per rating to maintain proportionality.</p>
+      <h2>Model Selection</h2>
+      <p>Fine-tuning pretrained models was resource-intensive. We switched to CrewAI’s agent framework, using Gemini 2.0 Flash for better performance.</p>
+      <h2>Agent Configuration</h2>
+      <p>Determined an optimal four-agent structure (Sentiment, Sentiment Review, Response, Reviewer) after multiple trials to balance complexity and performance.</p>
+    </div>
+  </div>
+  <div id="chat-widget" class="chat-widget">
+    <div class="tab-section home-section active" id="home-section">
+      <div class="home-header">
+        <svg class="logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="rgb(243, 156, 24)"></path>
+        </svg>
+        <h1>Hey there, how can we help?</h1>
       </div>
-      <div class="tab-section messages-section" id="messages-section">
-        <div class="messages-header">
-          <div class="header-left">
-            <div class="back-arrow" onclick="switchTab('home')"><</div>
-            <div class="header-title">
-              <div class="title">EmpathyBot</div>
-              <div class="subtext">We’re here to assist you</div>
+      <div class="home-body">
+        <div class="home-main" id="home-main">
+          <div class="chat-container">
+            <div class="start-new-chat-label">Start New Chat</div>
+            <div class="new-chat-option" id="new-chat-option" onclick="startNewChat()">
+              <span>Share Your Feedback or Report an Issue</span>
+              <span class="arrow">></span>
             </div>
           </div>
-          <div class="download-icon" onclick="downloadTranscript()">⋮</div>
-        </div>
-        <div class="messages-body" id="chat-box">
-          <div class="message bot">
-            <div class="bubble">
-              <span class="sender">EmpathyBot</span>
-              <span>Hi! What's your name?</span>
+          <input type="text" class="search-bar" id="search-bar" placeholder="Search for help">
+          <div class="search-result" id="search-result">
+            <div class="search-result-header">
+              <h2>Search Result</h2>
+              <div class="clear-search" onclick="clearSearch()">Clear Search</div>
+            </div>
+            <div class="search-result-content" id="search-result-content">
+              <div class="home-item" onclick="sendSuggestion('Check Order Status')">
+                Check Order Status <span class="arrow">></span>
+              </div>
+              <div class="home-item" onclick="sendSuggestion('Track Order')">
+                Track Order <span class="arrow">></span>
+              </div>
+              <div class="home-item" onclick="sendSuggestion('Cancel Order')">
+                Cancel Order <span class="arrow">></span>
+              </div>
+              <div class="home-item" onclick="sendSuggestion('Talk to an Agent')">
+                Talk to an Agent <span class="arrow">></span>
+              </div>
+            </div>
+          </div>
+          <div class="faq-section">
+            <h3>FAQs</h3>
+            <div class="faq-item" onclick="showDetail('how-to-use')">
+              How to Use This Chatbot <span class="arrow">></span>
+            </div>
+            <div class="faq-item" onclick="showDetail('chat-ends')">
+              When Chat Ends, Go to Home Page and Start New <span class="arrow">></span>
+            </div>
+            <div class="faq-item" onclick="showDetail('recent-chats-24')">
+              Recent Chats Will Be Available Forever <span class="arrow">></span>
+            </div>
+            <div class="faq-item" onclick="showDetail('ethical-content')">
+              Ethical Content Guidelines for Server Response <span class="arrow">></span>
             </div>
           </div>
         </div>
-        <div class="messages-footer" id="messages-footer">
-          <div class="suggestions" id="suggestions">
-            <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
+        <div class="home-detail" id="detail-how-to-use">
+          <div class="home-detail-header">
+            <div class="back-arrow" onclick="hideDetail()"><</div>
+            <h2>How to Use This Chatbot</h2>
           </div>
-          <div class="end-chat-btn" onclick="endChat()">End Chat</div>
-          <div class="input-container">
-            <div class="input-row">
-              <button class="mic-btn" onclick="startVoice()">🎙️</button>
-              <input type="text" id="user-input" placeholder="Message...">
-              <button class="send-btn" onclick="sendMessage()">
-                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
-              </button>
-            </div>
+          <div class="home-detail-content">
+            <p>The Amazon Chatbot is designed to assist you with your shopping needs in a simple and intuitive way. To get started, click the message icon at the bottom-right corner of the screen to open the chat widget.</p>
+            <p>From the "Home" tab, select "Share Your Feedback or Report an Issue" to begin a new conversation, or explore helpful articles by clicking on options like "What is This Chatbot For?" or "Getting Started with Amazon Chatbot."</p>
+            <p>In the "Messages" tab, the chatbot will guide you step-by-step—first asking for your name, then the purchase date, the product, and finally your feedback or issue.</p>
+            <p>You can also use the search bar on the "Home" tab to quickly find help on specific topics, or use the microphone button to send voice messages for a hands-free experience.</p>
+            <iframe src="https://drive.google.com/file/d/1y3nhbOf3fTLT04r0iBgw9ee9zArB33Gs/preview" allow="autoplay" allowfullscreen></iframe>
           </div>
         </div>
-      </div>
-      <div class="navbar">
-        <div id="home-tab" class="active">
-          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="rgb(243, 156, 24)" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          <span>Home</span>
+        <div class="home-detail" id="detail-chat-ends">
+          <div class="home-detail-header">
+            <div class="back-arrow" onclick="hideDetail()"><</div>
+            <h2>When Chat Ends, Go to Home Page and Start New</h2>
+          </div>
+          <div class="home-detail-content">
+            <p>Once your conversation with the Amazon Chatbot concludes, you’ll be automatically directed back to the "Home" tab to ensure a seamless experience. This reset allows you to easily start a fresh chat without lingering on previous conversations.</p>
+            <p>To begin a new chat, simply click "Share Your Feedback or Report an Issue" again, and the chatbot will restart the process by asking for your name, purchase date, product, and feedback.</p>
+            <p>This feature ensures that each interaction is independent, keeping your experience organized and focused on your current needs.</p>
+          </div>
         </div>
-        <div id="messages-tab">
-          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#999999" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-          <span>Messages</span>
+        <div class="home-detail" id="detail-recent-chats-24">
+          <div class="home-detail-header">
+            <div class="back-arrow" onclick="hideDetail()"><</div>
+            <h2>Recent Chats Will Be Available Forever</h2>
+          </div>
+          <div class="home-detail-content">
+            <p>Your recent conversations with the Amazon Chatbot are conveniently displayed under the "Recent Chats" section on the "Home" tab, allowing you to revisit them if needed.</p>
+            <p>These chats are now stored indefinitely in local storage, so you can access them anytime without worrying about expiration.</p>
+            <p>If you wish to continue a conversation, simply click on it to reopen it, or start a new chat by selecting "Share Your Feedback or Report an Issue."</p>
+          </div>
+        </div>
+        <div class="home-detail" id="detail-ethical-content">
+          <div class="home-detail-header">
+            <div class="back-arrow" onclick="hideDetail()"><</div>
+            <h2>Ethical Content Guidelines for Server Response</h2>
+          </div>
+          <div class="home-detail-content">
+            <p>The Amazon Chatbot is committed to fostering a respectful and supportive environment, and as such, the server will only respond to messages that adhere to ethical content guidelines.</p>
+            <p>Please use polite and appropriate language when interacting with the chatbot, avoiding any offensive, discriminatory, or harmful content. For example, instead of saying, "This product is trash," try, "I’m not satisfied with this product because of its quality."</p>
+            <p>If your message contains inappropriate language, the server may not respond, and you’ll receive a message like, "Sorry, there was an error reaching the server. Please try again later." Let’s keep the conversation friendly and constructive to ensure the best experience for everyone.</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="message-icon" onclick="toggleChat()"></div>
+    <div class="tab-section messages-section" id="messages-section">
+      <div class="messages-header">
+        <div class="header-left">
+          <div class="back-arrow" onclick="switchTab('home')"><</div>
+          <div class="header-title">
+            <div class="title">EmpathyBot</div>
+            <div class="subtext">We’re here to assist you</div>
+          </div>
+        </div>
+        <div class="download-icon" onclick="downloadTranscript()">⋮</div>
+      </div>
+      <div class="messages-body" id="chat-box">
+        <div class="message bot">
+          <div class="bubble">
+            <span class="sender">EmpathyBot</span>
+            <span>Hi! What's your name?</span>
+          </div>
+        </div>
+      </div>
+      <div class="messages-footer" id="messages-footer">
+        <div class="suggestions" id="suggestions">
+          <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
+        </div>
+        <div class="end-chat-btn" onclick="endChat()">End Chat</div>
+        <div class="input-container">
+          <div class="input-row">
+            <button class="mic-btn" onclick="startVoice()">🎙️</button>
+            <input type="text" id="user-input" placeholder="Message...">
+            <button class="send-btn" onclick="sendMessage()">
+              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="navbar">
+      <div id="home-tab" class="active">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="rgb(243, 156, 24)" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+      </div>
+      <div id="messages-tab">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#999999" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        <span>Messages</span>
+      </div>
+    </div>
+  </div>
+  <div class="message-icon" onclick="toggleChat()"></div>
 
-    <script>
-      let name = "";
-      let date = "";
-      let product = "";
-      let step = 0;
-      let currentConversationId = null;
-      let conversations = JSON.parse(localStorage.getItem('conversations')) || {};
-      let isChatActive = false;
-      let isTyping = false;
-      let lastIntent = null;
+  <script>
+    let name = "";
+    let date = "";
+    let product = "";
+    let step = 0;
+    let currentConversationId = null;
+    let conversations = JSON.parse(localStorage.getItem('conversations')) || {};
+    let isChatActive = false;
+    let isTyping = false;
+    let lastIntent = null;
 
-      function toggleChat() {
-        const chatWidget = document.getElementById('chat-widget');
-        chatWidget.classList.toggle('active');
-        if (chatWidget.classList.contains('active')) {
-          startTimestampUpdates();
-          updateNewChatOptionState();
-          loadRecentMessages();
-        }
-      }
-
-      function switchTab(tab) {
-        document.querySelectorAll('.navbar div').forEach(div => div.classList.remove('active'));
-        document.querySelectorAll('.tab-section').forEach(section => section.classList.remove('active'));
-        document.getElementById(`${tab}-tab`).classList.add('active');
-        document.getElementById(`${tab}-section`).classList.add('active');
-        if (tab === 'messages') {
-          if (!isChatActive) {
-            loadConversationsList();
-          }
-        } else if (tab === 'home') {
-          if (currentConversationId && conversations[currentConversationId]) {
-HDR: isChatActive = conversations[currentConversationId].active;
-          } else {
-            isChatActive = false;
-          }
-          hideDetail();
-          clearSearch();
-          startTimestampUpdates();
-          updateNewChatOptionState();
-          loadRecentMessages();
-        }
-      }
-
-      function showWarningDialog() {
-        const homeBody = document.querySelector('#home-section .home-body');
-        const existingWarning = document.querySelector('.warning-dialog');
-        if (existingWarning) {
-          existingWarning.remove();
-        }
-        const warningDiv = document.createElement('div');
-        warningDiv.className = 'warning-dialog';
-        warningDiv.innerHTML = `
-          <span class="close-btn" onclick="this.parentElement.remove()">×</span>
-          <p>Please end the current chat before starting a new one.</p>
-          <div class="action-btn" onclick="switchTab('messages'); this.parentElement.remove()">Go to Chat</div>
-        `;
-        homeBody.insertBefore(warningDiv, homeBody.firstChild);
-        homeBody.scrollTop = 0;
-      }
-
-      function updateNewChatOptionState() {
-        const newChatOption = document.getElementById('new-chat-option');
-        if (isChatActive) {
-          newChatOption.classList.add('disabled');
-          newChatOption.onclick = () => {
-            showWarningDialog();
-          };
-        } else {
-          newChatOption.classList.remove('disabled');
-          newChatOption.onclick = startNewChat;
-        }
-      }
-
-      function startNewChat() {
-        if (isChatActive) {
-          showWarningDialog();
-          return;
-        }
-        currentConversationId = Date.now().toString();
-        step = 0;
-        isChatActive = true;
-        lastIntent = null;
-        conversations[currentConversationId] = {
-          messages: [],
-          lastMessage: "",
-          timestamp: new Date().toISOString(),
-          name: "",
-          date: "",
-          product: "",
-          step: 0,
-          active: true,
-          lastIntent: null
-        };
-        switchTab('messages');
-        resetMessagesTab();
+    function toggleChat() {
+      const chatWidget = document.getElementById('chat-widget');
+      chatWidget.classList.toggle('active');
+      if (chatWidget.classList.contains('active')) {
+        startTimestampUpdates();
         updateNewChatOptionState();
         loadRecentMessages();
       }
+    }
 
-      async function endChat() {
+    function switchTab(tab) {
+      document.querySelectorAll('.navbar div').forEach(div => div.classList.remove('active'));
+      document.querySelectorAll('.tab-section').forEach(section => section.classList.remove('active'));
+      document.getElementById(`${tab}-tab`).classList.add('active');
+      document.getElementById(`${tab}-section`).classList.add('active');
+      if (tab === 'messages') {
+        if (!isChatActive) {
+          loadConversationsList();
+        }
+      } else if (tab === 'home') {
         if (currentConversationId && conversations[currentConversationId]) {
-          try {
-            const response = await fetch('/end_chat', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ session_id: currentConversationId })
-            });
-            if (response.ok) {
-              conversations[currentConversationId].active = false;
-              appendBotMessage("Chat ended. Start a new chat from the Home tab. ❤️");
-              const contactInfo = document.createElement('div');
-              contactInfo.className = 'contact-info';
-              contactInfo.innerHTML = `
-                Customer Service Contact<br>
-                customerservice@amazon.com<br>
-                +1-800-123-4567<br>
-                123 Amazon Way, Seattle, WA 98101
-              `;
-              document.getElementById('chat-box').appendChild(contactInfo);
-              const footer = document.getElementById('messages-footer');
-              footer.innerHTML = `<div class="chat-ended-message">Chat ended</div>`;
-              localStorage.setItem('conversations', JSON.stringify(conversations));
-              isChatActive = false;
-              currentConversationId = null;
-              lastIntent = null;
-              updateNewChatOptionState();
-              loadRecentMessages();
-            } else {
-              appendBotMessage("Failed to end the chat. Please try again.");
-            }
-          } catch (error) {
-            appendBotMessage("Error ending the chat. Please check your connection and try again.");
-          }
+          isChatActive = conversations[currentConversationId].active;
+        } else {
+          isChatActive = false;
         }
+        hideDetail();
+        clearSearch();
+        startTimestampUpdates();
+        updateNewChatOptionState();
+        loadRecentMessages();
       }
+    }
 
-      function loadConversationsList() {
-        if (isChatActive) return;
-        const chatBox = document.getElementById('chat-box');
-        const footer = document.getElementById('messages-footer');
-        chatBox.innerHTML = '';
-        footer.innerHTML = '';
-        const conversationIds = Object.keys(conversations)
-          .sort((a, b) => new Date(conversations[b].timestamp) - new Date(conversations[a].timestamp));
-        if (conversationIds.length > 0) {
-          const label = document.createElement('div');
-          label.className = 'recent-chats-label';
-          label.textContent = 'Recent Chats';
-          chatBox.appendChild(label);
-        }
-        conversationIds.forEach(id => {
-          const convo = conversations[id];
-          if (convo.lastMessage) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'recent-message';
-            messageDiv.onclick = () => loadConversation(id);
-            messageDiv.innerHTML = `
-              <div style="display: flex; align-items: center;">
-                <span>${convo.lastMessage.slice(0, 20)}${convo.lastMessage.length > 20 ? '...' : ''}</span>
-              </div>
-              <span class="arrow">></span>
+    function showWarningDialog() {
+      const homeBody = document.querySelector('#home-section .home-body');
+      const existingWarning = document.querySelector('.warning-dialog');
+      if (existingWarning) {
+        existingWarning.remove();
+      }
+      const warningDiv = document.createElement('div');
+      warningDiv.className = 'warning-dialog';
+      warningDiv.innerHTML = `
+        <span class="close-btn" onclick="this.parentElement.remove()">×</span>
+        <p>Please end the current chat before starting a new one.</p>
+        <div class="action-btn" onclick="switchTab('messages'); this.parentElement.remove()">Go to Chat</div>
+      `;
+      homeBody.insertBefore(warningDiv, homeBody.firstChild);
+      homeBody.scrollTop = 0;
+    }
+
+    function updateNewChatOptionState() {
+      const newChatOption = document.getElementById('new-chat-option');
+      if (isChatActive) {
+        newChatOption.classList.add('disabled');
+        newChatOption.onclick = () => {
+          showWarningDialog();
+        };
+      } else {
+        newChatOption.classList.remove('disabled');
+        newChatOption.onclick = startNewChat;
+      }
+    }
+
+    function startNewChat() {
+      if (isChatActive) {
+        showWarningDialog();
+        return;
+      }
+      currentConversationId = Date.now().toString();
+      step = 0;
+      isChatActive = true;
+      lastIntent = null;
+      conversations[currentConversationId] = {
+        messages: [],
+        lastMessage: "",
+        timestamp: new Date().toISOString(),
+        name: "",
+        date: "",
+        product: "",
+        step: 0,
+        active: true,
+        lastIntent: null
+      };
+      switchTab('messages');
+      resetMessagesTab();
+      updateNewChatOptionState();
+      loadRecentMessages();
+    }
+
+    async function endChat() {
+      if (currentConversationId && conversations[currentConversationId]) {
+        try {
+          const response = await fetch('/end_chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: currentConversationId })
+          });
+          if (response.ok) {
+            conversations[currentConversationId].active = false;
+            appendBotMessage("Chat ended. Start a new chat from the Home tab. ❤️", null, 0);
+            const contactInfo = document.createElement('div');
+            contactInfo.className = 'contact-info';
+            contactInfo.innerHTML = `
+              Customer Service Contact<br>
+              customerservice@amazon.com<br>
+              +1-800-123-4567<br>
+              123 Amazon Way, Seattle, WA 98101
             `;
-            chatBox.appendChild(messageDiv);
+            document.getElementById('chat-box').appendChild(contactInfo);
+            const footer = document.getElementById('messages-footer');
+            footer.innerHTML = `<div class="chat-ended-message">Chat ended</div>`;
+            localStorage.setItem('conversations', JSON.stringify(conversations));
+            isChatActive = false;
+            currentConversationId = null;
+            lastIntent = null;
+            updateNewChatOptionState();
+            loadRecentMessages();
+          } else {
+            appendBotMessage("Failed to end the chat. Please try again.", null, 0);
           }
-        });
-        scrollToBottom();
+        } catch (error) {
+          appendBotMessage("Error ending the chat. Please check your connection and try again.", null, 0);
+        }
       }
+    }
 
-      function loadRecentMessages() {
-        const recentMessages = document.getElementById('recent-messages');
-        recentMessages.innerHTML = '';
-        const conversationIds = Object.keys(conversations)
-          .sort((a, b) => new Date(conversations[b].timestamp) - new Date(conversations[a].timestamp));
-        const ongoingChat = conversationIds.find(id => conversations[id].active);
-        if (ongoingChat) {
-          const convo = conversations[ongoingChat];
+    function loadConversationsList() {
+      if (isChatActive) return;
+      const chatBox = document.getElementById('chat-box');
+      const footer = document.getElementById('messages-footer');
+      chatBox.innerHTML = '';
+      footer.innerHTML = '';
+      const conversationIds = Object.keys(conversations)
+        .sort((a, b) => new Date(conversations[b].timestamp) - new Date(conversations[a].timestamp));
+      if (conversationIds.length > 0) {
+        const label = document.createElement('div');
+        label.className = 'recent-chats-label';
+        label.textContent = 'Recent Chats';
+        chatBox.appendChild(label);
+      }
+      conversationIds.forEach(id => {
+        const convo = conversations[id];
+        if (convo.lastMessage) {
+          const messageDiv = document.createElement('div');
+          messageDiv.className = 'recent-message';
+          messageDiv.onclick = () => loadConversation(id);
+          messageDiv.innerHTML = `
+            <div style="display: flex; align-items: center;">
+              <span>${convo.lastMessage.slice(0, 20)}${convo.lastMessage.length > 20 ? '...' : ''}</span>
+            </div>
+            <span class="arrow">></span>
+          `;
+          chatBox.appendChild(messageDiv);
+        }
+      });
+      scrollToBottom();
+    }
+
+    function loadRecentMessages() {
+      const recentMessages = document.getElementById('recent-messages');
+      recentMessages.innerHTML = '';
+      const conversationIds = Object.keys(conversations)
+        .sort((a, b) => new Date(conversations[b].timestamp) - new Date(conversations[a].timestamp));
+      const ongoingChat = conversationIds.find(id => conversations[id].active);
+      if (ongoingChat) {
+        const convo = conversations[ongoingChat];
+        if (convo.lastMessage) {
+          const messageDiv = document.createElement('div');
+          messageDiv.className = 'recent-message';
+          messageDiv.onclick = () => {
+            loadConversation(ongoingChat);
+            switchTab('messages');
+          };
+          messageDiv.innerHTML = `
+            <div style="display: flex; align-items: center;">
+              <span>${convo.lastMessage.slice(0, 20)}${convo.lastMessage.length > 20 ? '...' : ''}</span>
+            </div>
+            <span class="arrow">></span>
+          `;
+          recentMessages.appendChild(messageDiv);
+        }
+      } else {
+        if (conversationIds.length > 0) {
+          const latestEndedChat = conversationIds[0];
+          const convo = conversations[latestEndedChat];
           if (convo.lastMessage) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'recent-message';
             messageDiv.onclick = () => {
-              loadConversation(ongoingChat);
+              loadConversation(latestEndedChat);
               switchTab('messages');
             };
             messageDiv.innerHTML = `
@@ -1534,258 +1563,252 @@ HDR: isChatActive = conversations[currentConversationId].active;
             `;
             recentMessages.appendChild(messageDiv);
           }
-        } else {
-          if (conversationIds.length > 0) {
-            const latestEndedChat = conversationIds[0];
-            const convo = conversations[latestEndedChat];
-            if (convo.lastMessage) {
-              const messageDiv = document.createElement('div');
-              messageDiv.className = 'recent-message';
-              messageDiv.onclick = () => {
-                loadConversation(latestEndedChat);
-                switchTab('messages');
-              };
-              messageDiv.innerHTML = `
-                <div style="display: flex; align-items: center;">
-                  <span>${convo.lastMessage.slice(0, 20)}${convo.lastMessage.length > 20 ? '...' : ''}</span>
-                </div>
-                <span class="arrow">></span>
-              `;
-              recentMessages.appendChild(messageDiv);
-            }
-          }
         }
       }
+    }
 
-      function loadConversation(conversationId) {
-        currentConversationId = conversationId;
-        const conversation = conversations[conversationId];
-        isChatActive = conversation.active;
-        const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML = `<div class="chat-date">${new Date(conversation.timestamp).toLocaleDateString()}</div>`;
-        let lastSender = null;
-        conversation.messages.forEach(msg => {
-          const messageDiv = document.createElement('div');
-          messageDiv.className = `message ${msg.type}`;
-          const bubbleDiv = document.createElement('div');
-          bubbleDiv.className = 'bubble';
-          if (msg.type === 'bot' && lastSender === 'bot') {
-            bubbleDiv.style.borderTopLeftRadius = '15px';
-          }
-          if (msg.type === 'user' && lastSender === 'user') {
-            bubbleDiv.style.borderTopRightRadius = '15px';
-          }
-          const senderSpan = document.createElement('span');
-          senderSpan.className = 'sender';
-          senderSpan.textContent = msg.type === 'bot' ? 'EmpathyBot' : 'You';
-          bubbleDiv.appendChild(senderSpan);
-          const textSpan = document.createElement('span');
-          textSpan.innerHTML = msg.text.replace(/\n/g, '<br>');
-          bubbleDiv.appendChild(textSpan);
-          messageDiv.appendChild(bubbleDiv);
-          if (msg.type === 'user') {
-            const timestamp = document.createElement('span');
-            timestamp.className = 'timestamp';
-            timestamp.setAttribute('data-timestamp', msg.timestamp);
-            messageDiv.appendChild(timestamp);
-          }
-          if (msg.audioUrl) {
-            const audioContainer = document.createElement('div');
-            audioContainer.className = 'audio-container';
-            const audio = document.createElement('audio');
-            audio.controls = true;
-            audio.src = msg.audioUrl;
-            audioContainer.appendChild(audio);
-            messageDiv.appendChild(audioContainer);
-          }
-          chatBox.appendChild(messageDiv);
-          lastSender = msg.type;
-        });
-        chatBox.scrollTop = chatBox.scrollHeight;
-        step = conversation.step || 0;
-        name = conversation.name || "";
-        date = conversation.date || "";
-        product = conversation.product || "";
-        lastIntent = conversation.lastIntent || null;
-        if (conversation.active) {
-          setupMessagesFooter();
-        } else {
-          const footer = document.getElementById('messages-footer');
-          footer.innerHTML = `
-            <div class="chat-ended-message">Chat ended</div>
-            <div class="contact-info">
-              Customer Service Contact<br>
-              customerservice@amazon.com<br>
-              +1-800-123-4567<br>
-              123 Amazon Way, Seattle, WA 98101
-            </div>
-          `;
+    function loadConversation(conversationId) {
+      currentConversationId = conversationId;
+      const conversation = conversations[conversationId];
+      isChatActive = conversation.active;
+      const chatBox = document.getElementById('chat-box');
+      chatBox.innerHTML = `<div class="chat-date">${new Date(conversation.timestamp).toLocaleDateString()}</div>`;
+      let lastSender = null;
+      conversation.messages.forEach(msg => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${msg.type}`;
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = 'bubble';
+        if (msg.type === 'bot' && lastSender === 'bot') {
+          bubbleDiv.style.borderTopLeftRadius = '15px';
         }
-        startTimestampUpdates();
-        updateNewChatOptionState();
-      }
-
-      function startTimestampUpdates() {
-        function updateTimestamps() {
-          const now = new Date();
-          document.querySelectorAll('.timestamp').forEach(timeElement => {
-            const timestamp = new Date(timeElement.getAttribute('data-timestamp'));
-            timeElement.textContent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          });
+        if (msg.type === 'user' && lastSender === 'user') {
+          bubbleDiv.style.borderTopRightRadius = '15px';
         }
-        updateTimestamps();
-        setInterval(updateTimestamps, 60000);
-      }
-
-      function showDetail(sectionId) {
-        document.getElementById('home-main').classList.add('hidden');
-        document.getElementById('search-result').classList.remove('active');
-        document.querySelectorAll('.home-detail').forEach(detail => detail.classList.remove('active'));
-        document.getElementById(`detail-${sectionId}`).classList.add('active');
-      }
-
-      function hideDetail() {
-        document.querySelectorAll('.home-detail').forEach(detail => detail.classList.remove('active'));
-        document.getElementById('home-main').classList.remove('hidden');
-      }
-
-      function detectIntent(message) {
-        const lowerMessage = message.toLowerCase();
-        if (lowerMessage.includes('return') || lowerMessage.includes('refund')) {
-          return 'return';
-        } else if (lowerMessage.includes('cancel') || lowerMessage.includes('cancellation')) {
-          return 'cancel';
-        } else if (lowerMessage.includes('agent') || lowerMessage.includes('human') || lowerMessage.includes('support')) {
-          return 'agent';
-        } else if (lowerMessage.includes('status') || lowerMessage.includes('track') || lowerMessage.includes('order')) {
-          return 'status';
+        const senderSpan = document.createElement('span');
+        senderSpan.className = 'sender';
+        senderSpan.textContent = msg.type === 'bot' ? 'EmpathyBot' : 'You';
+        bubbleDiv.appendChild(senderSpan);
+        const textSpan = document.createElement('span');
+        textSpan.innerHTML = msg.text.replace(/\n/g, '<br>');
+        bubbleDiv.appendChild(textSpan);
+        messageDiv.appendChild(bubbleDiv);
+        if (msg.type === 'user') {
+          const timestamp = document.createElement('span');
+          timestamp.className = 'timestamp';
+          timestamp.setAttribute('data-timestamp', msg.timestamp);
+          messageDiv.appendChild(timestamp);
         }
-        return 'review';
-      }
-
-      async function sendSuggestion(suggestion) {
-        document.getElementById('user-input').value = suggestion;
-        await sendMessage();
-      }
-
-      async function searchHelp() {
-        const searchBar = document.getElementById('search-bar');
-        const query = searchBar.value.trim();
-        if (!query) return;
-
-        const searchResult = document.getElementById('search-result');
-        const searchResultContent = document.getElementById('search-result-content');
-        searchResult.classList.add('active');
-        searchResultContent.innerHTML = '<p>Loading...</p>';
-
-        try {
-          const response = await fetch("/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              name: "User",
-              date: "Unknown",
-              product: "Unknown",
-              input: query,
-              session_id: currentConversationId || Date.now().toString(),
-              intent: "search"
-            })
-          });
-          const data = await response.json();
-          if (response.ok) {
-            searchResultContent.innerHTML = '';
-            const p = document.createElement('p');
-            p.textContent = data.reviewed_response || 'No response received.';
-            searchResultContent.appendChild(p);
-          } else {
-            searchResultContent.innerHTML = '<p>Sorry, there was an error processing your query. Please try again later.</p>';
-          }
-        } catch (error) {
-          searchResultContent.innerHTML = '<p>Unable to reach the server. Please check your connection and try again.</p>';
+        if (msg.audioUrl) {
+          const audioContainer = document.createElement('div');
+          audioContainer.className = 'audio-container';
+          const audio = document.createElement('audio');
+          audio.controls = true;
+          audio.src = msg.audioUrl;
+          audioContainer.appendChild(audio);
+          messageDiv.appendChild(audioContainer);
         }
-      }
-
-      function clearSearch() {
-        const searchBar = document.getElementById('search-bar');
-        const searchResult = document.getElementById('search-result');
-        searchBar.value = '';
-        searchResult.classList.remove('active');
-      }
-
-      document.getElementById('search-bar').addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          searchHelp();
-        }
+        chatBox.appendChild(messageDiv);
+        lastSender = msg.type;
       });
-
-      function resetMessagesTab() {
-        const chatBox = document.getElementById('chat-box');
-        const date = new Date().toLocaleDateString();
-        chatBox.innerHTML = `
-          <div class="chat-date">${date}</div>
-          <div class="message bot">
-            <div class="bubble">
-              <span class="sender">EmpathyBot</span>
-              <span>Hi! What's your name?</span>
-            </div>
-          </div>
-        `;
-        if (currentConversationId && conversations[currentConversationId]) {
-          conversations[currentConversationId].messages = [{
-            type: 'bot',
-            text: "Hi! What's your name?",
-            timestamp: new Date().toISOString()
-          }];
-          conversations[currentConversationId].active = true;
-          conversations[currentConversationId].lastIntent = null;
-          localStorage.setItem('conversations', JSON.stringify(conversations));
-        }
+      chatBox.scrollTop = chatBox.scrollHeight;
+      step = conversation.step || 0;
+      name = conversation.name || "";
+      date = conversation.date || "";
+      product = conversation.product || "";
+      lastIntent = conversation.lastIntent || null;
+      if (conversation.active) {
         setupMessagesFooter();
-        scrollToBottom();
-        startTimestampUpdates();
-      }
-
-      function setupMessagesFooter() {
+      } else {
         const footer = document.getElementById('messages-footer');
         footer.innerHTML = `
-          <div class="suggestions" id="suggestions">
-            <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
-          </div>
-          <div class="end-chat-btn" onclick="endChat()">End Chat</div>
-          <div class="input-container">
-            <div class="input-row">
-              <button class="mic-btn" onclick="startVoice()">🎙️</button>
-              <input type="text" id="user-input" placeholder="Message...">
-              <button class="send-btn" onclick="sendMessage()">
-                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
-              </button>
-            </div>
+          <div class="chat-ended-message">Chat ended</div>
+          <div class="contact-info">
+            Customer Service Contact<br>
+            customerservice@amazon.com<br>
+            +1-800-123-4567<br>
+            123 Amazon Way, Seattle, WA 98101
           </div>
         `;
-        document.getElementById('user-input').addEventListener('keypress', function(event) {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            sendMessage();
-          }
+      }
+      startTimestampUpdates();
+      updateNewChatOptionState();
+    }
+
+    function startTimestampUpdates() {
+      function updateTimestamps() {
+        const now = new Date();
+        document.querySelectorAll('.timestamp').forEach(timeElement => {
+          const timestamp = new Date(timeElement.getAttribute('data-timestamp'));
+          timeElement.textContent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         });
       }
+      updateTimestamps();
+      setInterval(updateTimestamps, 60000);
+    }
 
-      function scrollToBottom() {
-        const chatBox = document.getElementById('chat-box');
-        chatBox.scrollTop = chatBox.scrollHeight;
+    function showDetail(sectionId) {
+      document.getElementById('home-main').classList.add('hidden');
+      document.getElementById('search-result').classList.remove('active');
+      document.querySelectorAll('.home-detail').forEach(detail => detail.classList.remove('active'));
+      document.getElementById(`detail-${sectionId}`).classList.add('active');
+    }
+
+    function hideDetail() {
+      document.querySelectorAll('.home-detail').forEach(detail => detail.classList.remove('active'));
+      document.getElementById('home-main').classList.remove('hidden');
+    }
+
+    function detectIntent(message) {
+      const lowerMessage = message.toLowerCase();
+      if (lowerMessage.includes('return') || lowerMessage.includes('refund')) {
+        return 'return';
+      } else if (lowerMessage.includes('cancel') || lowerMessage.includes('cancellation')) {
+        return 'cancel';
+      } else if (lowerMessage.includes('agent') || lowerMessage.includes('human') || lowerMessage.includes('support')) {
+        return 'agent';
+      } else if (lowerMessage.includes('status') || lowerMessage.includes('track') || lowerMessage.includes('order')) {
+        return 'status';
       }
+      return 'review';
+    }
 
-      function appendBotMessage(text, audioUrl) {
-        if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
+    async function sendSuggestion(suggestion) {
+      document.getElementById('user-input').value = suggestion;
+      await sendMessage();
+    }
+
+    async function searchHelp() {
+      const searchBar = document.getElementById('search-bar');
+      const query = searchBar.value.trim();
+      if (!query) return;
+
+      const searchResult = document.getElementById('search-result');
+      const searchResultContent = document.getElementById('search-result-content');
+      searchResult.classList.add('active');
+      searchResultContent.innerHTML = '<p>Loading...</p>';
+
+      try {
+        const response = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "User",
+            date: "Unknown",
+            product: "Unknown",
+            input: query,
+            session_id: currentConversationId || Date.now().toString(),
+            intent: "search"
+          })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          searchResultContent.innerHTML = '';
+          const p = document.createElement('p');
+          p.textContent = data.reviewed_response || 'No response received.';
+          searchResultContent.appendChild(p);
+        } else {
+          searchResultContent.innerHTML = '<p>Sorry, there was an error processing your query. Please try again later.</p>';
+        }
+      } catch (error) {
+        searchResultContent.innerHTML = '<p>Unable to reach the server. Please check your connection and try again.</p>';
+      }
+    }
+
+    function clearSearch() {
+      const searchBar = document.getElementById('search-bar');
+      const searchResult = document.getElementById('search-result');
+      searchBar.value = '';
+      searchResult.classList.remove('active');
+    }
+
+    document.getElementById('search-bar').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        searchHelp();
+      }
+    });
+
+    function resetMessagesTab() {
+      const chatBox = document.getElementById('chat-box');
+      const date = new Date().toLocaleDateString();
+      chatBox.innerHTML = `
+        <div class="chat-date">${date}</div>
+        <div class="message bot">
+          <div class="bubble">
+            <span class="sender">EmpathyBot</span>
+            <span>Hi! What's your name?</span>
+          </div>
+        </div>
+      `;
+      if (currentConversationId && conversations[currentConversationId]) {
+        conversations[currentConversationId].messages = [{
+          type: 'bot',
+          text: "Hi! What's your name?",
+          timestamp: new Date().toISOString()
+        }];
+        conversations[currentConversationId].active = true;
+        conversations[currentConversationId].lastIntent = null;
+        localStorage.setItem('conversations', JSON.stringify(conversations));
+      }
+      setupMessagesFooter();
+      scrollToBottom();
+      startTimestampUpdates();
+    }
+
+    function setupMessagesFooter() {
+      const footer = document.getElementById('messages-footer');
+      footer.innerHTML = `
+        <div class="suggestions" id="suggestions">
+          <button class="suggestion-btn" onclick="sendSuggestion('Check Order Status')">Check Order Status</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('Cancel Order')">Cancel Order</button>
+          <button class="suggestion-btn" onclick="sendSuggestion('Talk to an Agent')">Talk to an Agent</button>
+        </div>
+        <div class="end-chat-btn" onclick="endChat()">End Chat</div>
+        <div class="input-container">
+          <div class="input-row">
+            <button class="mic-btn" onclick="startVoice()">🎙️</button>
+            <input type="text" id="user-input" placeholder="Message...">
+            <button class="send-btn" onclick="sendMessage()">
+              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M2 21l21-9L2 3v7l15 2-15 2v7z'/></svg>" alt="Send">
+            </button>
+          </div>
+        </div>
+      `;
+      const input = document.getElementById('user-input');
+      input.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
+      input.addEventListener('focus', () => {
+        document.getElementById('messages-footer').classList.add('active');
+        scrollToBottom();
+      });
+      input.addEventListener('blur', () => {
+        document.getElementById('messages-footer').classList.remove('active');
+      });
+      input.addEventListener('input', () => {
+        scrollToBottom();
+      });
+    }
+
+        function scrollToBottom() {
+      const chatBox = document.getElementById('chat-box');
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function appendBotMessage(text, audioUrl, delay = 0) {
+      if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
+      setTimeout(() => {
         const chatBox = document.getElementById('chat-box');
         const typingIndicator = document.getElementById('typing-indicator');
         if (typingIndicator) typingIndicator.remove();
 
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message bot';
+        messageDiv.style.opacity = '0';
         const bubbleDiv = document.createElement('div');
         bubbleDiv.className = 'bubble';
         const lastMessage = chatBox.lastElementChild;
@@ -1810,6 +1833,10 @@ HDR: isChatActive = conversations[currentConversationId].active;
           messageDiv.appendChild(audioContainer);
         }
         chatBox.appendChild(messageDiv);
+        messageDiv.animate([
+          { opacity: 0, transform: 'translateY(10px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ], { duration: 500, easing: 'ease-in-out' });
         chatBox.scrollTop = chatBox.scrollHeight;
         conversations[currentConversationId].messages.push({
           type: 'bot',
@@ -1820,197 +1847,206 @@ HDR: isChatActive = conversations[currentConversationId].active;
         conversations[currentConversationId].timestamp = new Date().toISOString();
         localStorage.setItem('conversations', JSON.stringify(conversations));
         isTyping = false;
+      }, delay);
+    }
+
+    function showTypingIndicator() {
+      if (isTyping) return;
+      isTyping = true;
+      const chatBox = document.getElementById('chat-box');
+      const typingDiv = document.createElement('div');
+      typingDiv.id = 'typing-indicator';
+      typingDiv.className = 'typing-indicator';
+      typingDiv.innerHTML = `
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      `;
+      chatBox.appendChild(typingDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      if (!message || !isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
+      const chatBox = document.getElementById('chat-box');
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user';
+      const bubbleDiv = document.createElement('div');
+      bubbleDiv.className = 'bubble';
+      const lastMessage = chatBox.lastElementChild;
+      if (lastMessage && lastMessage.className === 'message user') {
+        bubbleDiv.style.borderTopRightRadius = '15px';
       }
+      const senderSpan = document.createElement('span');
+      senderSpan.className = 'sender';
+      senderSpan.textContent = 'You';
+      bubbleDiv.appendChild(senderSpan);
+      const textSpan = document.createElement('span');
+      textSpan.textContent = message;
+      bubbleDiv.appendChild(textSpan);
+      userMessage.appendChild(bubbleDiv);
+      const timestamp = document.createElement('span');
+      timestamp.className = 'timestamp';
+      timestamp.setAttribute('data-timestamp', new Date().toISOString());
+      timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      userMessage.appendChild(timestamp);
+      chatBox.appendChild(userMessage);
+      input.value = '';
+      conversations[currentConversationId].messages.push({
+        type: 'user',
+        text: message,
+        timestamp: new Date().toISOString(),
+        showTimestamp: true
+      });
+      conversations[currentConversationId].lastMessage = message;
+      conversations[currentConversationId].timestamp = new Date().toISOString();
+      localStorage.setItem('conversations', JSON.stringify(conversations));
+      showTypingIndicator();
+      await handleMessage(message);
+      scrollToBottom();
+    }
 
-      function showTypingIndicator() {
-        if (isTyping) return;
-        isTyping = true;
-        const chatBox = document.getElementById('chat-box');
-        const typingDiv = document.createElement('div');
-        typingDiv.id = 'typing-indicator';
-        typingDiv.className = 'typing-indicator';
-        typingDiv.innerHTML = `
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        `;
-        chatBox.appendChild(typingDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
+    function groupSentences(sentences) {
+      if (sentences.length <= 2 && sentences.join(' ').length <= 500) {
+        return [sentences.join(' ')];
       }
-
-      async function sendMessage() {
-        const input = document.getElementById('user-input');
-        const message = input.value.trim();
-        if (!message || !isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
-        const chatBox = document.getElementById('chat-box');
-        const userMessage = document.createElement('div');
-        userMessage.className = 'message user';
-        const bubbleDiv = document.createElement('div');
-        bubbleDiv.className = 'bubble';
-        const lastMessage = chatBox.lastElementChild;
-        if (lastMessage && lastMessage.className === 'message user') {
-          bubbleDiv.style.borderTopRightRadius = '15px';
-        }
-        const senderSpan = document.createElement('span');
-        senderSpan.className = 'sender';
-        senderSpan.textContent = 'You';
-        bubbleDiv.appendChild(senderSpan);
-        const textSpan = document.createElement('span');
-        textSpan.textContent = message;
-        bubbleDiv.appendChild(textSpan);
-        userMessage.appendChild(bubbleDiv);
-        const timestamp = document.createElement('span');
-        timestamp.className = 'timestamp';
-        timestamp.setAttribute('data-timestamp', new Date().toISOString());
-        timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        userMessage.appendChild(timestamp);
-        chatBox.appendChild(userMessage);
-        input.value = '';
-        conversations[currentConversationId].messages.push({
-          type: 'user',
-          text: message,
-          timestamp: new Date().toISOString(),
-          showTimestamp: true
-        });
-        conversations[currentConversationId].lastMessage = message;
-        conversations[currentConversationId].timestamp = new Date().toISOString();
-        localStorage.setItem('conversations', JSON.stringify(conversations));
-        showTypingIndicator();
-        await handleMessage(message);
-        scrollToBottom();
-      }
-
-      function groupSentences(sentences) {
-        if (sentences.length <= 2 && sentences.join(' ').length <= 500) {
-          return [sentences.join(' ')];
-        }
-        const grouped = [];
-        let currentGroup = [];
-        let currentLength = 0;
-        sentences.forEach(sentence => {
-          const sentenceLength = sentence.length;
-          if (currentLength + sentenceLength <= 300 && currentGroup.length < 2) {
-            currentGroup.push(sentence);
-            currentLength += sentenceLength;
-          } else {
-            if (currentGroup.length > 0) {
-              grouped.push(currentGroup.join(' '));
-            }
-            currentGroup = [sentence];
-            currentLength = sentenceLength;
-          }
-        });
-        if (currentGroup.length > 0) {
-          grouped.push(currentGroup.join(' '));
-        }
-        return grouped.slice(0, 2);
-      }
-
-      async function handleMessage(message) {
-        if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
-        const convo = conversations[currentConversationId];
-        const intent = detectIntent(message);
-
-        if (intent === 'agent') {
-          appendBotMessage("Please contact our customer service team at customerservice@amazon.com or +1-800-123-4567. They're ready to assist you! 😊");
-          await endChat();
-          return;
-        }
-
-        if (step === 0) {
-          name = message;
-          convo.name = name;
-          appendBotMessage(`Thanks, ${name}. When did you purchase the product?`);
-          step++;
-          lastIntent = null;
-        } else if (step === 1) {
-          date = message;
-          convo.date = date;
-          appendBotMessage("Got it. What product did you purchase?");
-          step++;
-          lastIntent = null;
-        } else if (step === 2) {
-          product = message;
-          convo.product = product;
-          appendBotMessage("Thanks! Now please describe your issue or feedback.");
-          step++;
-          lastIntent = null;
+      const grouped = [];
+      let currentGroup = [];
+      let currentLength = 0;
+      sentences.forEach(sentence => {
+        const sentenceLength = sentence.length;
+        if (currentLength + sentenceLength <= 300 && currentGroup.length < 2) {
+          currentGroup.push(sentence);
+          currentLength += sentenceLength;
         } else {
-          try {
-            const response = await fetch("/chat", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                name,
-                date,
-                product,
-                input: message,
-                session_id: currentConversationId,
-                intent: intent,
-                last_intent: lastIntent
-              })
-            });
-            const data = await response.json();
-            if (response.ok) {
-              const sentences = (data.reviewed_response || 'No response received.').split(/[.!?]\s+/).filter(s => s.trim() !== '');
-              const groupedResponses = groupSentences(sentences);
-              groupedResponses.forEach(responseText => {
-                appendBotMessage(responseText, data.audio_url && groupedResponses.indexOf(responseText) === groupedResponses.length - 1 ? data.audio_url : null);
-              });
-            } else {
-              appendBotMessage("Sorry, there was an error processing your query. Please try again later.");
-            }
-          } catch (error) {
-            appendBotMessage("Unable to reach the server. Please check your connection and try again.");
+          if (currentGroup.length > 0) {
+            grouped.push(currentGroup.join(' '));
           }
+          currentGroup = [sentence];
+          currentLength = sentenceLength;
         }
-        lastIntent = intent;
-        convo.step = step;
-        convo.lastIntent = lastIntent;
-        localStorage.setItem('conversations', JSON.stringify(conversations));
+      });
+      if (currentGroup.length > 0) {
+        grouped.push(currentGroup.join(' '));
+      }
+      return grouped.slice(0, 2);
+    }
+
+    async function handleMessage(message) {
+      if (!isChatActive || !currentConversationId || !conversations[currentConversationId]) return;
+      const convo = conversations[currentConversationId];
+      const intent = detectIntent(message);
+
+      if (intent === 'agent') {
+        appendBotMessage("Please contact our customer service team at customerservice@amazon.com or +1-800-123-4567. They're ready to assist you! 😊", null, 0);
+        await endChat();
+        return;
       }
 
-      function startVoice() {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'en-US';
-        recognition.start();
-
-        recognition.onresult = function(event) {
-          const transcript = event.results[0][0].transcript;
-          document.getElementById('user-input').value = transcript;
-          sendMessage();
-        };
-
-        recognition.onerror = function(event) {
-          appendBotMessage("Voice recognition error: " + event.error);
-        };
-      }
-
-      function downloadTranscript() {
-        if (!currentConversationId || !conversations[currentConversationId]) return;
-        const convo = conversations[currentConversationId];
-        let transcript = "EmpathyBot Transcript\n\n";
-        convo.messages.forEach(msg => {
-          const sender = msg.type === 'bot' ? 'EmpathyBot' : 'You';
-          transcript += `${sender}: ${msg.text}\n`;
-          if (msg.type === 'user') {
-            const timestamp = new Date(msg.timestamp);
-            transcript += `(${timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})\n`;
+      if (step === 0) {
+        name = message;
+        convo.name = name;
+        appendBotMessage(`Thanks, ${name}. When did you purchase the product?`, null, 0);
+        step++;
+        lastIntent = null;
+      } else if (step === 1) {
+        date = message;
+        convo.date = date;
+        appendBotMessage("Got it. What product did you purchase?", null, 0);
+        step++;
+        lastIntent = null;
+      } else if (step === 2) {
+        product = message;
+        convo.product = product;
+        appendBotMessage("Thanks! Now please describe your issue or feedback.", null, 0);
+        step++;
+        lastIntent = null;
+      } else {
+        try {
+          const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              date,
+              product,
+              input: message,
+              session_id: currentConversationId,
+              intent: intent,
+              last_intent: lastIntent
+            })
+          });
+          const data = await response.json();
+          if (response.ok) {
+            const sentences = (data.reviewed_response || 'No response received.').split(/[.!?]\s+/).filter(s => s.trim() !== '');
+            const groupedResponses = groupSentences(sentences);
+            groupedResponses.forEach((responseText, index) => {
+              const delay = index * 1500; // 1.5 seconds delay per message
+              appendBotMessage(responseText, data.audio_url && index === groupedResponses.length - 1 ? data.audio_url : null, delay);
+            });
+            if (groupedResponses.length > 1) {
+              showTypingIndicator();
+              setTimeout(() => {
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) typingIndicator.remove();
+              }, groupedResponses.length * 1500);
+            }
+          } else {
+            appendBotMessage("Sorry, there was an error processing your query. Please try again later.", null, 0);
           }
-        });
-        const blob = new Blob([transcript], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `empathybot_transcript_${currentConversationId}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        } catch (error) {
+          appendBotMessage("Unable to reach the server. Please check your connection and try again.", null, 0);
+        }
       }
+      lastIntent = intent;
+      convo.step = step;
+      convo.lastIntent = lastIntent;
+      localStorage.setItem('conversations', JSON.stringify(conversations));
+    }
 
-      document.getElementById('home-tab').onclick = () => switchTab('home');
-      document.getElementById('messages-tab').onclick = () => switchTab('messages');
-    </script>
-  </body>
+    function startVoice() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('user-input').value = transcript;
+        sendMessage();
+      };
+
+      recognition.onerror = function(event) {
+        appendBotMessage("Voice recognition error: " + event.error, null, 0);
+      };
+    }
+
+    function downloadTranscript() {
+      if (!currentConversationId || !conversations[currentConversationId]) return;
+      const convo = conversations[currentConversationId];
+      let transcript = "EmpathyBot Transcript\n\n";
+      convo.messages.forEach(msg => {
+        const sender = msg.type === 'bot' ? 'EmpathyBot' : 'You';
+        transcript += `${sender}: ${msg.text}\n`;
+        if (msg.type === 'user') {
+          const timestamp = new Date(msg.timestamp);
+          transcript += `(${timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})\n`;
+        }
+      });
+      const blob = new Blob([transcript], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `empathybot_transcript_${currentConversationId}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('home-tab').onclick = () => switchTab('home');
+    document.getElementById('messages-tab').onclick = () => switchTab('messages');
+  </script>
+</body>
 </html>
