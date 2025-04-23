@@ -1,10 +1,18 @@
-# Amazon Chatbot
+# EmpathyBot
 
-A web-based chatbot for handling Amazon customer reviews using FastAPI, CrewAI, and Google Gemini models.
+A web-based chatbot for handling Amazon customer reviews, built with **FastAPI**, **CrewAI**, and **Google Gemini** models for empathetic, conversational interactions.  
+Developed for the **Master of Data Science and Innovation** program at the **University of Technology Sydney** (Assignment 2, Group 11).
 
-## Setup
+---
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/<your-username>/amazon-chatbot.git
-   cd amazon-chatbot
+## 📦 Setup
+
+### 🔁 Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/amazon-chatbot.git
+cd amazon-chatbot
+
+📦 Install dependencies
+
+pip install -r requirements.txt
