@@ -26,7 +26,8 @@ positive_considerations = [
     "Write a sentence sincerely thanking the customer.",
     "Note that success comes from valued customers like them.",
     "Express hope that the product provides lasting benefits.",
-    "Lightly encourage them to shop again with humor."
+    "Lightly encourage them to shop again with humor.",
+    "If appropriate, include a reference to a contemporary fictional character from a web service to make the response engaging."
 ]
 
 negative_considerations = [
@@ -40,7 +41,8 @@ neutral_considerations = [
     "Thank the customer for their feedback.",
     "Express appreciation for their loyalty.",
     "Compliment the product they purchased.",
-    "Ask what more can be done to improve their experience."
+    "Ask what more can be done to improve their experience.",
+    "If appropriate, include a reference to a contemporary fictional character from a web service to add a fun touch."
 ]
 
 # Intent-specific considerations
@@ -57,7 +59,8 @@ cancel_considerations = [
 
 status_considerations = [
     "Guide the customer to check their order status on the 'Orders' page.",
-    "Offer to assist further if the order is delayed."
+    "Offer to assist further if the order is delayed.",
+    "If appropriate, include a reference to a contemporary fictional character from a web service to add a fun touch."
 ]
 
 # Sentiment-specific expectations
@@ -255,6 +258,7 @@ def run_agent(agent_input):
             f"- Neutral: {', '.join(neutral_expectations)}\n"
             f"- Intent-specific: {', '.join(intent_expectations)}\n"
             f"For negative feedback, only mention return policy if intent is 'return' or review explicitly mentions returning. "
+            f"For positive, neutral, or status intent, use SerperDevTool to find a contemporary fictional character (post-2000, from movies, TV, or books) for a fun reference if it fits the tone. "
             f"Return window is 30 days; purchase is {'within' if is_within_return_window else 'outside'} the window."
         ),
         expected_output=(
@@ -264,7 +268,8 @@ def run_agent(agent_input):
             f"- Follow order inquiry guidelines: {order_inquiry}\n"
             "- Reflects the sentiment (Positive, Negative, or Neutral) or intent (Return, Cancel, Status).\n"
             "- Incorporates empathy and solutions (if negative or intent-specific).\n"
-            "- If necessary, search Amazon for product details or alternative solutions."
+            "- If necessary, search Amazon for product details or alternative solutions.\n"
+            "- Includes a contemporary fictional character reference for positive, neutral, or status intent if appropriate."
         ),
         agent=response_agent,
         context=[sentiment_task, sentiment_review_task]
@@ -277,6 +282,7 @@ def run_agent(agent_input):
             f"Previous intent: '{last_intent or 'none'}'. "
             f"Ensure empathy, clarity, and alignment with Amazon standards. "
             f"For negative feedback, only mention return policy if intent is 'return' or review mentions returning; otherwise, focus on other solutions. "
+            f"For positive, neutral, or status intent, use SerperDevTool to find a contemporary fictional character (post-2000, from movies, TV, or books) for a fun reference if it fits the tone. "
             f"Return window is 30 days; purchase is {'within' if is_within_return_window else 'outside'} the window."
         ),
         expected_output=(
@@ -289,7 +295,8 @@ def run_agent(agent_input):
             "- For intents, provides specific actions (e.g., return steps, cancellation info, status check).\n"
             f"- Includes contact details if escalated: {customer_service_contact['name']}, "
             f"{customer_service_contact['email']}, {customer_service_contact['phone']}.\n"
-            "- If needed, includes a link to product recommendations or solutions from Amazon or web searches."
+            "- If needed, includes a link to product recommendations or solutions from Amazon or web searches.\n"
+            "- Includes a contemporary fictional character reference for positive, neutral, or status intent if appropriate."
             " Ends with a warm, positive thank-you note"
         ),
         agent=reviewer_agent,
@@ -358,7 +365,8 @@ def process_reply(agent_input: dict, customer_reply: str, response_result: str):
             f"Current intent: '{intent}', previous intent: '{last_intent or 'none'}'. "
             f"Follow order inquiry guidelines: {order_inquiry}. "
             "Do not repeat the previous response. "
-            "Do not end the conversation unless the customer agrees to the solution."
+            "Do not end the conversation unless the customer agrees to the solution. "
+            f"For positive or neutral tone, use SerperDevTool to find a contemporary fictional character (post-2000, from movies, TV, or books) for a fun reference if it fits."
         ),
         expected_output=(
             "A response string with the following characteristics:\n"
@@ -368,6 +376,7 @@ def process_reply(agent_input: dict, customer_reply: str, response_result: str):
             "- Respond to customer inquiries or concerns with a warm, helpful tone.\n"
             "- Ensure the response is unique and avoids repeating prior responses.\n"
             "- Only end the conversation if the customer agrees to the solution.\n"
+            "- Includes a contemporary fictional character reference for positive or neutral tone if appropriate.\n"
             "Ends with a warm, positive thank-you note"
         ),
         agent=general_response_agent,
